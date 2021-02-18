@@ -2,10 +2,10 @@ import { RouteCollection } from "../organisms"
 import { useState } from "react"
 
 export default function Index() {
-	const [NumberOfRoutes, setNumberOfRoutes] = useState(1)
+	const [NumberOfRoutes, setNumberOfRoutes] = useState(2)
 	const [Systems, setSystems] = useState([])
 	const [finalResult, setFinalResult] = useState()
-	const RoutesDom = CreateRoutesDom(NumberOfRoutes, setSystems)
+	const RoutesDom = CreateRoutesDom(NumberOfRoutes, Systems, setSystems)
 
 	return (
 		<div>
@@ -16,12 +16,29 @@ export default function Index() {
 	)
 }
 
-const CreateRoutesDom = (count, setSystems) => {
+const CreateRoutesDom = (count, Systems, setSystems) => {
 	let RoutesDom = []
 	for (let i = 0; i < count; i++) {
-		RoutesDom.push(<RouteCollection setSystemsToRoute={setSystems}/>)
-	}
+		RoutesDom.push(<RouteCollection key={i} id={i} AllSystems={Systems} setSystemsToRoute={setSystems}/>)
+  }
 	return RoutesDom
+}
+
+let SystemsDataToArray = (Systems) => {
+  let SystemsArray = []
+  for (const Collection of Systems) {
+    SystemsArray.push(...Collection.Systems)
+  }
+  return SystemsArray
+}
+
+const getRoute = (systems) => {
+  let SystemsData = SystemsDataToArray(systems)
+  console.log(SystemsData)
+  let distances = getDistanceBetweenSystems(SystemsData)
+  let combinations = getCombinations(SystemsData.length)
+  let routes = getAllRoute(combinations, distances)
+  return getBestRoute(routes)
 }
 
 //get distance between systems
@@ -32,15 +49,6 @@ const getDistance = (start, end) => {
   vector.z = end.z - start.z
   vector.length = Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z)
   return vector.length
-}
-
-const getRoute = (systems) => {
-  let combinations
-  let distances = getDistanceBetweenSystems(systems)
-  console.log(distances)
-  combinations = getCombinations(systems.length)
-  let routes = getAllRoute(combinations, distances)
-  return getBestRoute(routes)
 }
 
 //get all routes distance
@@ -70,7 +78,6 @@ const getBestRoute = (routes) => {
       min = route
     }
   }
-  console.log(Date.now() - start)
   return min
 }
 
@@ -140,7 +147,6 @@ const Heap = (length, array) => {
       i++
     }
   }
-  console.log("skonczon heap")
   return result
 }
 //generate distances between all selected systems 
