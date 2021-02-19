@@ -58,9 +58,9 @@ export default function RouteCollection({ setSystemsToRoute, AllSystems, id }) {
 }
 
 const MoveAfter = (data, changePos) => {
-	if (data[changePos]) data[changePos].after = checkPosition(data, changePos)
-	if (data[changePos + 1]) data[changePos + 1].after = checkPosition(data, changePos + 1)
-	if (data[changePos + 2]) data[changePos + 2].after = checkPosition(data, changePos + 2)
+	if (data[changePos]) data[changePos].after = [checkPosition(data, changePos)]
+	if (data[changePos + 1]) data[changePos + 1].after = [checkPosition(data, changePos + 1)]
+	if (data[changePos + 2]) data[changePos + 2].after = [checkPosition(data, changePos + 2)]
 	return data
 }
 

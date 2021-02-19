@@ -2,41 +2,81 @@ import { RouteCollection } from "../organisms"
 import { useState } from "react"
 
 export default function Index() {
-	const [NumberOfRoutes, setNumberOfRoutes] = useState(2)
-	const [Systems, setSystems] = useState([])
-	const [finalResult, setFinalResult] = useState()
-	const RoutesDom = CreateRoutesDom(NumberOfRoutes, Systems, setSystems)
+  const [NumberOfRoutes, setNumberOfRoutes] = useState(2)
+  const [Systems, setSystems] = useState([])
+  const [finalResult, setFinalResult] = useState()
+  const RoutesDom = CreateRoutesDom(NumberOfRoutes, Systems, setSystems)
 
-	return (
-		<div>
-			{RoutesDom}
-			<button onClick={() => setFinalResult(getRoute(Systems))}>Calculate</button>
-			{JSON.stringify(finalResult)}
-		</div>
-	)
+  return (
+    <div>
+      {RoutesDom}
+      <button onClick={() => setFinalResult(getRoute(Systems))}>Calculate</button>
+      {JSON.stringify(finalResult)}
+    </div>
+  )
 }
 
 const CreateRoutesDom = (count, Systems, setSystems) => {
-	let RoutesDom = []
-	for (let i = 0; i < count; i++) {
-		RoutesDom.push(<RouteCollection key={i} id={i} AllSystems={Systems} setSystemsToRoute={setSystems}/>)
+  let RoutesDom = []
+  for (let i = 0; i < count; i++) {
+    RoutesDom.push(<RouteCollection key={i} id={i} AllSystems={Systems} setSystemsToRoute={setSystems} />)
   }
-	return RoutesDom
+  return RoutesDom
 }
 
-let SystemsDataToArray = (Systems) => {
+const SystemsDataToArray = (Systems) => {
   let SystemsArray = []
   for (const Collection of Systems) {
     SystemsArray.push(...Collection.Systems)
   }
-  return SystemsArray
+  console.log(SystemsArray)
+  return checkForSame(SystemsArray)
+}
+
+const checkForSame = (Systems) => {
+  let systemsToDelete = []
+  for (let [index, system] of Systems.entries()) {
+    for (let [index2, system2] of Systems.entries()) {
+      if ((index !== index2) && (system.id === system2.id)) {
+        if (!CheckIfIsInArray(systemsToDelete, index2)) {
+          systemsToDelete.push({ id: index, after: [...system.after, ...system2.after], idDelete: index2 })
+        }
+      }
+    }
+  }
+  console.log(systemsToDelete)
+  for (const system of systemsToDelete) {
+    Systems.splice(system.idDelete, 1)
+    Systems[system.id].after = checkAfter(system.after)
+    console.log(system.after)
+  }
+  return Systems
+}
+
+const checkAfter = (afterArray) => {
+  for (let i = 0; i < afterArray.length; i++) {
+    for (let j = 0; j < afterArray.length; j++) {
+      if (i !== j && afterArray[i] === afterArray[j]) {
+        afterArray.splice(i, 1)
+      }
+    }
+  }
+  return afterArray
+}
+
+const CheckIfIsInArray = (array, index) => {
+  for (let item of array) {
+    if (item.id === index) {
+      return true
+    }
+  }
 }
 
 const getRoute = (systems) => {
   let SystemsData = SystemsDataToArray(systems)
   console.log(SystemsData)
   let distances = getDistanceBetweenSystems(SystemsData)
-  let combinations = getCombinations(SystemsData.length)
+  let combinations = getCombinations(SystemsData.length, SystemsData)
   let routes = getAllRoute(combinations, distances)
   return getBestRoute(routes)
 }
@@ -64,16 +104,15 @@ const getAllRoute = (combinations, distances) => {
         }
       }
     }
-    Distances.push({combination:combination,distance:distance})
+    Distances.push({ combination: combination, distance: distance })
   }
   return Distances
 }
 
 //Get shortest route
 const getBestRoute = (routes) => {
-	let start = Date.now()
   let min = routes[0]
-  for(let route of routes) {
+  for (let route of routes) {
     if (route.distance < min.distance) {
       min = route
     }
@@ -82,16 +121,60 @@ const getBestRoute = (routes) => {
 }
 
 //get all combination of possible routes
-const getCombinations = (numberOfSystems) => {
+const getCombinations = (numberOfSystems, SystemsData) => {
   let array = []
   for (let i = 1; i < numberOfSystems; i++) {
     array.push(i)
   }
-  return Heap(array.length, array)
+  let Conditions = setConditions(array, SystemsData)
+  let Combinations = Heap(array.length, array)
+  return CheckConditions(Conditions, Combinations)
+}
+
+const CheckConditions = (Conditions, Combinations) => {
+  let BackupCombinations = [...Combinations]
+  for (let j = 0; j < Conditions.length; j++) {
+    for (let i = 0; i < Combinations.length; i++) {
+      let row = Combinations[i]
+      for (let k = 0; k < row.length; k++) {
+        if (row[k] === Conditions[j][1]) {
+          for (let l = k; l < row.length; l++) {
+            if (row[l] === Conditions[j][0]) {
+              Combinations.splice(i, 1)
+              i--
+            }
+          }
+        }
+      }
+    }
+  }
+  if (Combinations.length) {
+    console.log('Combinations')
+    return Combinations
+  }
+  else {
+    console.log(BackupCombinations)
+    return BackupCombinations
+  }
+}
+
+const setConditions = (SystemNumbers, SystemData) => {
+  let Conditions = []
+  console.log(SystemNumbers)
+  for (let i = 1; i < SystemData.length; i++) {
+    for (let j = 1; j < SystemData.length; j++) {
+      for (const after of SystemData[i].after) {
+        if (after === SystemData[j].id) {
+          Conditions.push([j, i])
+        }
+      }
+    }
+  }
+  return Conditions
 }
 
 //generate combinations of routes
-const Heap = (length, array) => {
+const Heap = (length, array, conditions) => {
   let k = 0
   let tempArray = []
   let result = []
