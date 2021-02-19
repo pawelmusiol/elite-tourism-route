@@ -24,35 +24,95 @@ const CreateRoutesDom = (count, Systems, setSystems) => {
   return RoutesDom
 }
 
+//Complete Data Together
 const SystemsDataToArray = (Systems) => {
   let SystemsArray = []
   for (const Collection of Systems) {
     SystemsArray.push(...Collection.Systems)
   }
-  console.log(SystemsArray)
   return checkForSame(SystemsArray)
 }
 
+//Checkin if systems are duplicated in array
 const checkForSame = (Systems) => {
   let systemsToDelete = []
   for (let [index, system] of Systems.entries()) {
     for (let [index2, system2] of Systems.entries()) {
+      //Check if there is another system with same id but not in same index
       if ((index !== index2) && (system.id === system2.id)) {
         if (!CheckIfIsInArray(systemsToDelete, index2)) {
-          systemsToDelete.push({ id: index, after: [...system.after, ...system2.after], idDelete: index2 })
+          systemsToDelete.push({ id: index, systemId: system.id, after: modifyAfter(system.after, system2.after), idDelete: index2 })
         }
       }
     }
   }
   console.log(systemsToDelete)
-  for (const system of systemsToDelete) {
-    Systems.splice(system.idDelete, 1)
-    Systems[system.id].after = checkAfter(system.after)
-    console.log(system.after)
+  let TempSystems = []
+
+  //Deleting Duplicated SystemsData
+  for (let i = 0; i < Systems.length; i++) {
+    let toPush = true
+    for (const system of systemsToDelete) {
+      if (system.idDelete === i) {
+        toPush = false
+      }
+      if (system.id === i) {
+        Systems[i].after = system.after
+      }
+      
+    }
+    if (toPush) {
+      TempSystems.push(Systems[i])
+    }
   }
-  return Systems
+  FixErroredSystems(systemsToDelete)
+  return TempSystems
 }
 
+//TO DO 
+const FixErroredSystems = (systemsToDelete) => {
+  let idAfter = []
+  let systemsToAdd = []
+  for (const [index,system] of systemsToDelete.entries()) {
+    for (const after of system.after) {
+      if (after < system.systemId) idAfter.push([after, system.systemId])
+      else idAfter.push([system.systemId, after])
+    }
+    //systemsToDelete[index].after = [system.after[0]]
+  }
+  
+  for (let i = 0; i < idAfter.length; i++) {
+    for (let j = 0; j < idAfter.length; j++){
+      if ((i !== j) && (idAfter[i][0] == idAfter[j][0] && idAfter[i][1] == idAfter[j][1])) {
+        
+      }
+    }
+  }
+
+
+  console.log(systemsToDelete)
+  console.log(idAfter)
+}
+
+//Save after for modified element
+const modifyAfter = (after1, after2) => {
+  let result = []
+  for (let i = 0; i < after1.length; i++) {
+    for (let j = 0; j < after2.length; j++) {
+      if (after1[i] !== after2[j]) {
+        result.push(after1[i])
+      }
+    }
+  }
+  for (let i = 0; i < after2.length; i++) {
+    if (!result.includes(after2[i])) {
+      result.push(after2[i])
+    }    
+  }
+  return result
+}
+
+//Dont know why it's there, whatever 
 const checkAfter = (afterArray) => {
   for (let i = 0; i < afterArray.length; i++) {
     for (let j = 0; j < afterArray.length; j++) {
@@ -64,6 +124,8 @@ const checkAfter = (afterArray) => {
   return afterArray
 }
 
+
+//Checking  if this system is in Array with systems to delete
 const CheckIfIsInArray = (array, index) => {
   for (let item of array) {
     if (item.id === index) {
@@ -72,14 +134,31 @@ const CheckIfIsInArray = (array, index) => {
   }
 }
 
+//One function to rule them all XD
 const getRoute = (systems) => {
   let SystemsData = SystemsDataToArray(systems)
-  console.log(SystemsData)
   let distances = getDistanceBetweenSystems(SystemsData)
   let combinations = getCombinations(SystemsData.length, SystemsData)
   let routes = getAllRoute(combinations, distances)
-  return getBestRoute(routes)
+  let bestRoute = getBestRoute(routes)
+  return getSystemsNames(bestRoute, SystemsData)
 }
+
+//Get Name of systems to result
+const getSystemsNames = (route, SystemsData) => {
+  let SystemNames = []
+  
+  for (let i = 0; i < route.combination.length; i++) {
+    for (let j = 0; j < SystemsData.length; j++) {
+      if (route.combination[i] === j) {
+        SystemNames.push(SystemsData[j].name)
+      }
+    }
+  }
+  route.combination = SystemNames
+  return route
+}
+
 
 //get distance between systems
 const getDistance = (start, end) => {
@@ -131,6 +210,9 @@ const getCombinations = (numberOfSystems, SystemsData) => {
   return CheckConditions(Conditions, Combinations)
 }
 
+//Spaghetti to check if any of Route Combination matches with Conditions
+//Return Array of right combinations if pass it
+//Return Array of all if not pass it
 const CheckConditions = (Conditions, Combinations) => {
   let BackupCombinations = [...Combinations]
   for (let j = 0; j < Conditions.length; j++) {
@@ -149,18 +231,17 @@ const CheckConditions = (Conditions, Combinations) => {
     }
   }
   if (Combinations.length) {
-    console.log('Combinations')
     return Combinations
   }
   else {
-    console.log(BackupCombinations)
+    alert('dupa, tak sie nie da XD')
     return BackupCombinations
   }
 }
 
+//Setting Conditions on checking prevs of systems
 const setConditions = (SystemNumbers, SystemData) => {
   let Conditions = []
-  console.log(SystemNumbers)
   for (let i = 1; i < SystemData.length; i++) {
     for (let j = 1; j < SystemData.length; j++) {
       for (const after of SystemData[i].after) {
