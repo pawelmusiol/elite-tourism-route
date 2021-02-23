@@ -2,7 +2,7 @@ import { RouteCollection } from "../organisms"
 import { useState } from "react"
 
 export default function Index() {
-  const [NumberOfRoutes, setNumberOfRoutes] = useState(2)
+  const [NumberOfRoutes, setNumberOfRoutes] = useState(5)
   const [Systems, setSystems] = useState([])
   const [finalResult, setFinalResult] = useState()
   const RoutesDom = CreateRoutesDom(NumberOfRoutes, Systems, setSystems)
@@ -46,7 +46,6 @@ const checkForSame = (Systems) => {
       }
     }
   }
-  console.log(systemsToDelete)
   let TempSystems = []
 
   //Deleting Duplicated SystemsData
@@ -59,32 +58,64 @@ const checkForSame = (Systems) => {
       if (system.id === i) {
         Systems[i].after = system.after
       }
-      
+
     }
     if (toPush) {
       TempSystems.push(Systems[i])
     }
   }
-  FixErroredSystems(systemsToDelete)
-  return TempSystems
+
+  
+
+  //FixErroredSystems(systemsToDelete)
+  return checkForPairSystems(TempSystems)
+}
+
+const checkForPairSystems = (Systems) => {
+  const prefix = 'x'
+  let idAfter = []
+  for (let [index1, System1] of Systems.entries()) {
+    for (const [index2, System2] of Systems.entries()) {
+      for (const After1 of System1.after) {
+        for (const After2 of System2.after) {
+          if (System1.id === After2 && index1 > 0 && System2.after.length > 1) {
+            console.log(System1.id + " " + After2)
+            console.log([System1,System2])
+            if (!idAfter.includes(System1) ) {
+              let TempSystem = {...System1}
+              TempSystem.id += prefix
+              System1.after.splice(System1.after.indexOf(After2),1)
+              TempSystem.after = [System2.id]
+              idAfter.push(TempSystem)
+            }
+          }
+        }
+      }
+    }
+    //idCounts.push({id:System1.id, count: SystemCount})
+  }
+  Systems.push(...idAfter)
+  console.log(Systems)
+  console.log(idAfter)
+  return Systems
 }
 
 //TO DO 
 const FixErroredSystems = (systemsToDelete) => {
   let idAfter = []
   let systemsToAdd = []
-  for (const [index,system] of systemsToDelete.entries()) {
+  for (const [index, system] of systemsToDelete.entries()) {
     for (const after of system.after) {
       if (after < system.systemId) idAfter.push([after, system.systemId])
       else idAfter.push([system.systemId, after])
     }
     //systemsToDelete[index].after = [system.after[0]]
   }
-  
+
   for (let i = 0; i < idAfter.length; i++) {
-    for (let j = 0; j < idAfter.length; j++){
+    for (let j = 0; j < idAfter.length; j++) {
       if ((i !== j) && (idAfter[i][0] == idAfter[j][0] && idAfter[i][1] == idAfter[j][1])) {
-        
+
       }
     }
   }
@@ -107,7 +138,7 @@ const modifyAfter = (after1, after2) => {
   for (let i = 0; i < after2.length; i++) {
     if (!result.includes(after2[i])) {
       result.push(after2[i])
-    }    
+    }
   }
   return result
 }
@@ -138,6 +169,7 @@ const CheckIfIsInArray = (array, index) => {
 const getRoute = (systems) => {
   let SystemsData = SystemsDataToArray(systems)
   let distances = getDistanceBetweenSystems(SystemsData)
+  console.log(SystemsData)
   let combinations = getCombinations(SystemsData.length, SystemsData)
   let routes = getAllRoute(combinations, distances)
   let bestRoute = getBestRoute(routes)
@@ -147,7 +179,7 @@ const getRoute = (systems) => {
 //Get Name of systems to result
 const getSystemsNames = (route, SystemsData) => {
   let SystemNames = []
-  
+
   for (let i = 0; i < route.combination.length; i++) {
     for (let j = 0; j < SystemsData.length; j++) {
       if (route.combination[i] === j) {
@@ -173,7 +205,6 @@ const getDistance = (start, end) => {
 //get all routes distance
 const getAllRoute = (combinations, distances) => {
   let Distances = []
-
   for (let combination of combinations) {
     let distance = 0
     for (let i = 0; i < combination.length - 1; i++) {
@@ -205,7 +236,7 @@ const getCombinations = (numberOfSystems, SystemsData) => {
   for (let i = 1; i < numberOfSystems; i++) {
     array.push(i)
   }
-  let Conditions = setConditions(array, SystemsData)
+  let Conditions = setConditions(SystemsData)
   let Combinations = Heap(array.length, array)
   return CheckConditions(Conditions, Combinations)
 }
@@ -214,6 +245,8 @@ const getCombinations = (numberOfSystems, SystemsData) => {
 //Return Array of right combinations if pass it
 //Return Array of all if not pass it
 const CheckConditions = (Conditions, Combinations) => {
+  console.log(Conditions)
+  console.log(Combinations)
   let BackupCombinations = [...Combinations]
   for (let j = 0; j < Conditions.length; j++) {
     for (let i = 0; i < Combinations.length; i++) {
@@ -240,12 +273,13 @@ const CheckConditions = (Conditions, Combinations) => {
 }
 
 //Setting Conditions on checking prevs of systems
-const setConditions = (SystemNumbers, SystemData) => {
+const setConditions = (SystemData) => {
   let Conditions = []
   for (let i = 1; i < SystemData.length; i++) {
     for (let j = 1; j < SystemData.length; j++) {
       for (const after of SystemData[i].after) {
         if (after === SystemData[j].id) {
+          console.log([SystemData[j]])
           Conditions.push([j, i])
         }
       }
