@@ -1,4 +1,4 @@
-import { RouteCollection } from "../organisms"
+import { RouteCollection, Result } from "../organisms"
 import { useState } from "react"
 
 export default function Index() {
@@ -11,7 +11,7 @@ export default function Index() {
     <div>
       {RoutesDom}
       <button onClick={() => setFinalResult(getRoute(Systems))}>Calculate</button>
-      {JSON.stringify(finalResult)}
+      <Result data={finalResult} />
     </div>
   )
 }
@@ -64,13 +64,12 @@ const checkForSame = (Systems) => {
       TempSystems.push(Systems[i])
     }
   }
-
-  
-
-  //FixErroredSystems(systemsToDelete)
   return checkForPairSystems(TempSystems)
 }
 
+
+//Check for pair systems and duplicate one of them to make it possible to run
+//Edit after of this systems
 const checkForPairSystems = (Systems) => {
   const prefix = 'x'
   let idAfter = []
@@ -78,7 +77,7 @@ const checkForPairSystems = (Systems) => {
     for (const [index2, System2] of Systems.entries()) {
       for (const After1 of System1.after) {
         for (const After2 of System2.after) {
-          if (System1.id === After2 && index1 > 0 && System2.after.length > 1) {
+          if (System1.id === After2 && index1 > 0 && System2.after.length > 1 && After2 !== -1) {
             console.log(System1.id + " " + After2)
             console.log([System1,System2])
             if (!idAfter.includes(System1) ) {
@@ -92,38 +91,11 @@ const checkForPairSystems = (Systems) => {
         }
       }
     }
-    //idCounts.push({id:System1.id, count: SystemCount})
   }
   Systems.push(...idAfter)
-  console.log(Systems)
-  console.log(idAfter)
   return Systems
 }
 
-//TO DO 
-const FixErroredSystems = (systemsToDelete) => {
-  let idAfter = []
-  let systemsToAdd = []
-  for (const [index, system] of systemsToDelete.entries()) {
-    for (const after of system.after) {
-      if (after < system.systemId) idAfter.push([after, system.systemId])
-      else idAfter.push([system.systemId, after])
-    }
-    //systemsToDelete[index].after = [system.after[0]]
-  }
-
-  for (let i = 0; i < idAfter.length; i++) {
-    for (let j = 0; j < idAfter.length; j++) {
-      if ((i !== j) && (idAfter[i][0] == idAfter[j][0] && idAfter[i][1] == idAfter[j][1])) {
-
-      }
-    }
-  }
-
-
-  console.log(systemsToDelete)
-  console.log(idAfter)
-}
 
 //Save after for modified element
 const modifyAfter = (after1, after2) => {
@@ -183,7 +155,7 @@ const getSystemsNames = (route, SystemsData) => {
   for (let i = 0; i < route.combination.length; i++) {
     for (let j = 0; j < SystemsData.length; j++) {
       if (route.combination[i] === j) {
-        SystemNames.push(SystemsData[j].name)
+        SystemNames.push({name: SystemsData[j].name, id: SystemsData[j].id})
       }
     }
   }
@@ -206,15 +178,17 @@ const getDistance = (start, end) => {
 const getAllRoute = (combinations, distances) => {
   let Distances = []
   for (let combination of combinations) {
+    let oneJumps = []
     let distance = 0
     for (let i = 0; i < combination.length - 1; i++) {
       for (let j = 0; j < distances.length; j++) {
         if (distances[j].startId === combination[i] && distances[j].endId === combination[i + 1]) {
           distance += distances[j].distance
+          oneJumps.push(distances[j])
         }
       }
     }
-    Distances.push({ combination: combination, distance: distance })
+    Distances.push({ combination: combination, distance: distance, Jumps: oneJumps })
   }
   return Distances
 }

@@ -37,12 +37,13 @@ export default function AddRouteRow({ systems, addSystem }) {
 			if (!systemExist) {
 				addSystem([...systems, data])
 			}
+			setInputValue("")
 		})
 	}
 
 	return (
 		<div>
-			<Input setValue={setInputValue} onEnter={onEnter} />
+			<Input setValue={setInputValue} value={InputValue} onEnter={onEnter} />
 			<Button onClick={onEnter}>
 				Dodaj
 			</Button>

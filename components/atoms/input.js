@@ -1,6 +1,6 @@
 
-export default function Input({setValue, onEnter}){
+export default function Input({setValue, onEnter, value}){
 	return (
-		<input type="text" onChange={(e) => setValue(e.target.value)} onKeyUp={(e) => {if(e.key === 'Enter') onEnter()}}></input>
+		<input type="text" value={value} onChange={(e) => setValue(e.target.value)} onKeyUp={(e) => {if(e.key === 'Enter') onEnter()}}></input>
 	)
 }
