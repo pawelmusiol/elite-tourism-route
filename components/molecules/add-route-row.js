@@ -2,9 +2,15 @@ import { Button, Input } from "../atoms"
 import { useState } from "react"
 
 const fetcher = async (url) => {
-	const res = await fetch(url)
-	const data = await res.json()
-	return data
+	try {
+		const res = await fetch(url)
+		const data = await res.json()
+		return data
+	} catch (error) {
+		alert(error)
+		return error
+	}
+
 }
 
 const getSystem = async (systemName) => {

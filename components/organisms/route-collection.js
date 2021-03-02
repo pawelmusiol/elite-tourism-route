@@ -3,7 +3,7 @@ import { DataRow, AddRouteRow } from "../molecules"
 
 
 
-export default function RouteCollection({ setSystemsToRoute, AllSystems, id }) {
+export default function RouteCollection({ setSystemsToRoute, AllSystems, id, first, children }) {
 	const [NumberOfRows, setNumberOfRows] = useState(1)
 	const [Systems, setSystems] = useState([])
 
@@ -39,7 +39,7 @@ export default function RouteCollection({ setSystemsToRoute, AllSystems, id }) {
 				changePos -= 1
 			}
 
-			data = MoveAfter(data,changePos)
+			data = MoveAfter(data, changePos)
 
 			setSystems(data)
 		}
@@ -49,12 +49,25 @@ export default function RouteCollection({ setSystemsToRoute, AllSystems, id }) {
 	const SystemDom = Systems.map((system, index) => <DataRow id={index} changePosition={swapPosition}>{system.name}</DataRow>)
 
 
-	return (
-		<div>
-			{SystemDom}
-			<AddRouteRow systems={Systems} addSystem={setSystems} />
-		</div>
-	)
+	if (!first) {
+		return (
+			<div>
+				<h3>{children}</h3>
+				{SystemDom}
+				<AddRouteRow systems={Systems} addSystem={setSystems} />
+			</div>
+		)
+	}
+	else {
+		return (
+			<div>
+				<h3>{children}</h3>
+				{SystemDom}
+				{!Systems.length 
+				&& <AddRouteRow systems={Systems} addSystem={setSystems} />}
+			</div>
+		)
+	}
 }
 
 const MoveAfter = (data, changePos) => {

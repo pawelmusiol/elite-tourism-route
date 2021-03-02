@@ -1,17 +1,28 @@
-import { RouteCollection, Result } from "../organisms"
+import { RouteCollection, Result, AddRoutePanel } from "../organisms"
 import { useState } from "react"
 
 export default function Index() {
-  const [NumberOfRoutes, setNumberOfRoutes] = useState(5)
+  const [NumberOfRoutes, setNumberOfRoutes] = useState(1)
   const [Systems, setSystems] = useState([])
   const [finalResult, setFinalResult] = useState()
   const RoutesDom = CreateRoutesDom(NumberOfRoutes, Systems, setSystems)
 
   return (
-    <div>
-      {RoutesDom}
-      <button onClick={() => setFinalResult(getRoute(Systems))}>Calculate</button>
-      <Result data={finalResult} />
+    <div id="main">
+      <div id="sytems">
+        <AddRoutePanel Routes={NumberOfRoutes} setRoutes={setNumberOfRoutes} />
+        <RouteCollection key={0} id={0} AllSystems={Systems} setSystemsToRoute={setSystems} first >System Startowy</RouteCollection>
+        {RoutesDom}
+        <button onClick={() => setFinalResult(getRoute(Systems))}>Calculate</button>
+      </div>
+      <Result data={finalResult} id="Result" />
+      <style jsx>{`
+        #main{
+          gap: 5%;
+          display:flex;
+          width: 100%;
+        }
+        `}</style>
     </div>
   )
 }
@@ -19,7 +30,7 @@ export default function Index() {
 const CreateRoutesDom = (count, Systems, setSystems) => {
   let RoutesDom = []
   for (let i = 0; i < count; i++) {
-    RoutesDom.push(<RouteCollection key={i} id={i} AllSystems={Systems} setSystemsToRoute={setSystems} />)
+    RoutesDom.push(<RouteCollection key={i + 1} id={i + 1} AllSystems={Systems} setSystemsToRoute={setSystems}>Droga nr {i + 1}</RouteCollection>)
   }
   return RoutesDom
 }
@@ -79,11 +90,11 @@ const checkForPairSystems = (Systems) => {
         for (const After2 of System2.after) {
           if (System1.id === After2 && index1 > 0 && System2.after.length > 1 && After2 !== -1) {
             console.log(System1.id + " " + After2)
-            console.log([System1,System2])
-            if (!idAfter.includes(System1) ) {
-              let TempSystem = {...System1}
+            console.log([System1, System2])
+            if (!idAfter.includes(System1)) {
+              let TempSystem = { ...System1 }
               TempSystem.id += prefix
-              System1.after.splice(System1.after.indexOf(After2),1)
+              System1.after.splice(System1.after.indexOf(After2), 1)
               TempSystem.after = [System2.id]
               idAfter.push(TempSystem)
             }
@@ -155,7 +166,7 @@ const getSystemsNames = (route, SystemsData) => {
   for (let i = 0; i < route.combination.length; i++) {
     for (let j = 0; j < SystemsData.length; j++) {
       if (route.combination[i] === j) {
-        SystemNames.push({name: SystemsData[j].name, id: SystemsData[j].id})
+        SystemNames.push({ name: SystemsData[j].name, id: SystemsData[j].id })
       }
     }
   }
