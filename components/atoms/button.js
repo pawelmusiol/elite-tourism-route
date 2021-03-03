@@ -1,5 +1,15 @@
-export default function Button({children, onClick}){
+export default function Button({children, onClick, className}){
 	return (
-		<button onClick={onClick}>{children}</button>
+		<a onClick={onClick}>
+			{children}
+			<style jsx>{`
+				a{
+					margin:0;
+					background: none;
+					cursor:pointer;
+					height: 100%;
+				}
+				`}</style>
+		</a>
 	)
 }

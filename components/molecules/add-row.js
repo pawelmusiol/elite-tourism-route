@@ -3,7 +3,7 @@ import { MoreButton } from "../atoms"
 export default function AddRow(){
 	return (
 		<div>
-			<MoreButton>Dodaj punkt</MoreButton>
+			<MoreButton>Dodaj trasę</MoreButton>
 		</div>
 	)
 }

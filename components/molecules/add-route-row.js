@@ -50,9 +50,14 @@ export default function AddRouteRow({ systems, addSystem }) {
 	return (
 		<div>
 			<Input setValue={setInputValue} value={InputValue} onEnter={onEnter} />
-			<Button onClick={onEnter}>
-				Dodaj
+			<Button onClick={onEnter} >
+			➡️
 			</Button>
+			<style jsx>{`
+				div{
+					display:inline-flex;
+				}
+				`}</style>
 		</div >
 	)
 }

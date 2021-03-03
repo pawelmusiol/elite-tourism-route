@@ -14,7 +14,8 @@ export default function result({ data }) {
 			<style jsx>{`
 				#result{
 					display:grid;
-					grid-template:"distance systems" "jumps systems";
+					grid-template:"jumps systems" "distance systems";
+					width:100%;
 				}
 				`}</style>
 		</div>
@@ -28,7 +29,7 @@ const useRouteData = (data) => {
 	useEffect(() => {
 		if (data) {
 			formatData(data, setSystemsDom, setJumpsDom)
-			setDistance(data.distance)
+			setDistance(Math.floor(data.distance*100)/100 + " Ly")
 		}
 	}, [data])
 	return [SystemsDom, JumpsDom, Distance]

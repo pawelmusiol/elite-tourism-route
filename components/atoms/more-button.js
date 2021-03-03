@@ -1,5 +1,5 @@
-export default function MoreButton({children}){
+export default function MoreButton({children, onClick}){
 	return (
-		<button>+{children}</button>
+		<button onClick={onClick}>+{children}</button>
 	)
 }
