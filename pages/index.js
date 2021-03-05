@@ -1,21 +1,24 @@
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
-import { useEffect, useState } from 'react'
 import Index from '../components/templates/'
+import {useEffect, useState} from "react"
+import axios from "axios"
 //import Database from "./api/database"
 
-
+const useSystemNames = () => {
+  const [SystemNames, setSystemNames] = useState({})
+  useEffect(() => {
+    axios.get("api/systems").then((response => 
+      setSystemNames(response.data)
+      ))
+  },[])
+  return SystemNames
+}
 
 
 
 export default function Home() {
-  const [systems, setSystems] = useState([])
-  const [inputValue, setInputValue] = useState("")
-  const systemsDom = systems.map((system) => JSON.stringify(system))
-
-
-
+  const SystemNames = useSystemNames()
   return (
-    <Index />
+    <Index SystemsNames = {SystemNames} />
   )
 }

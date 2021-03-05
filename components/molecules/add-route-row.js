@@ -1,4 +1,4 @@
-import { Button, Input } from "../atoms"
+import { Button, Input, InputDown } from "../atoms"
 import { useState } from "react"
 
 const fetcher = async (url) => {
@@ -19,7 +19,7 @@ const getSystem = async (systemName) => {
 	return systemData
 }
 
-export default function AddRouteRow({ systems, addSystem }) {
+export default function AddRouteRow({ systems, addSystem, SystemsNames }) {
 	const [InputValue, setInputValue] = useState("")
 
 	const onEnter = () => {
@@ -47,11 +47,13 @@ export default function AddRouteRow({ systems, addSystem }) {
 		})
 	}
 
+
 	return (
 		<div>
 			<Input setValue={setInputValue} value={InputValue} onEnter={onEnter} />
+			{SystemsInputDom(SystemsNames)}
 			<Button onClick={onEnter} >
-			➡️
+				➡️
 			</Button>
 			<style jsx>{`
 				div{
@@ -60,4 +62,11 @@ export default function AddRouteRow({ systems, addSystem }) {
 				`}</style>
 		</div >
 	)
+}
+
+const SystemsInputDom = (SystemsNames) => {
+	if ( typeof SystemsNames === Array) {
+		
+		return SystemsNames.map((system, index) => <InputDown>{system.name}</InputDown>)
+	}
 }

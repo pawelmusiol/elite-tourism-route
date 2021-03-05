@@ -1,6 +1,6 @@
 import {AddRoute} from "../molecules"
 
-export default function addRoutePanel({Routes, setRoutes}){    
+export default function addRoutePanel({Routes, setRoutes, SystemNames}){    
     return (
         <div>
             <p>{Routes} {RoutesText(Routes)}</p>

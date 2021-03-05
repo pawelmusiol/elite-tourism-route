@@ -1,7 +1,7 @@
 import { RouteCollection, Result, AddRoutePanel } from "../organisms"
 import { useState } from "react"
 
-export default function Index() {
+export default function Index({SystemsNames}) {
   const [NumberOfRoutes, setNumberOfRoutes] = useState(1)
   const [Systems, setSystems] = useState([])
   const [finalResult, setFinalResult] = useState()
@@ -11,7 +11,7 @@ export default function Index() {
     <div id="main">
       <div id="sytems">
         <AddRoutePanel Routes={NumberOfRoutes} setRoutes={setNumberOfRoutes} />
-        <RouteCollection key={0} id={0} AllSystems={Systems} setSystemsToRoute={setSystems} first >System Startowy</RouteCollection>
+        <RouteCollection key={0} id={0} SystemsNames={SystemsNames} AllSystems={Systems} setSystemsToRoute={setSystems} first >System Startowy</RouteCollection>
         {RoutesDom}
         <button onClick={() => setFinalResult(getRoute(Systems))}>Calculate</button>
       </div>

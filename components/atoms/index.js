@@ -4,6 +4,7 @@ import MoreButton from "./more-button"
 import Data from "./data"
 import ResultData from "./result-data"
 import Title from "./title"
+import InputDown from "./input-down"
 
 export {
 	Button,
@@ -11,5 +12,6 @@ export {
 	MoreButton,
 	Data,
 	ResultData,
-	Title
+	Title,
+	InputDown
 }
