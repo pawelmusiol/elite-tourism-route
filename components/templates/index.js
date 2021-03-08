@@ -1,17 +1,31 @@
 import { RouteCollection, Result, AddRoutePanel } from "../organisms"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useDispatch } from "react-redux"
+import { getSystems} from "../../redux/actions/systems"
+import axios from "axios"
 
-export default function Index({SystemsNames}) {
+const useSystems = () => {
+  let dispatch = useDispatch()
+  useEffect(() => {
+    axios.get("api/systems").then((result) => {
+      dispatch(getSystems(result.data))
+    })
+  },[])
+}
+
+export default function Index() {
   const [NumberOfRoutes, setNumberOfRoutes] = useState(1)
   const [Systems, setSystems] = useState([])
   const [finalResult, setFinalResult] = useState()
   const RoutesDom = CreateRoutesDom(NumberOfRoutes, Systems, setSystems)
 
+  useSystems()
+
   return (
     <div id="main">
       <div id="sytems">
         <AddRoutePanel Routes={NumberOfRoutes} setRoutes={setNumberOfRoutes} />
-        <RouteCollection key={0} id={0} SystemsNames={SystemsNames} AllSystems={Systems} setSystemsToRoute={setSystems} first >System Startowy</RouteCollection>
+        <RouteCollection key={0} id={0} AllSystems={Systems} setSystemsToRoute={setSystems} first >System Startowy</RouteCollection>
         {RoutesDom}
         <button onClick={() => setFinalResult(getRoute(Systems))}>Calculate</button>
       </div>

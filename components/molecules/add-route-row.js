@@ -1,5 +1,6 @@
 import { Button, Input, InputDown } from "../atoms"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useSelector } from "react-redux"
 
 const fetcher = async (url) => {
 	try {
@@ -19,8 +20,15 @@ const getSystem = async (systemName) => {
 	return systemData
 }
 
-export default function AddRouteRow({ systems, addSystem, SystemsNames }) {
+const useGetSystems = () => {
+	useSelector(state => {
+		return state.systems
+	})
+}
+
+export default function AddRouteRow({ systems, addSystem }) {
 	const [InputValue, setInputValue] = useState("")
+	console.log(useGetSystems())
 
 	const onEnter = () => {
 		getSystem(InputValue).then((data) => {
@@ -51,7 +59,6 @@ export default function AddRouteRow({ systems, addSystem, SystemsNames }) {
 	return (
 		<div>
 			<Input setValue={setInputValue} value={InputValue} onEnter={onEnter} />
-			{SystemsInputDom(SystemsNames)}
 			<Button onClick={onEnter} >
 				➡️
 			</Button>
@@ -62,11 +69,4 @@ export default function AddRouteRow({ systems, addSystem, SystemsNames }) {
 				`}</style>
 		</div >
 	)
-}
-
-const SystemsInputDom = (SystemsNames) => {
-	if ( typeof SystemsNames === Array) {
-		
-		return SystemsNames.map((system, index) => <InputDown>{system.name}</InputDown>)
-	}
 }

@@ -4,7 +4,11 @@ export default async (req, res) => {
 
 	
 
-	mongoose.connect(process.env.MONGODB_URI, process.env.CONN_PARAMS)
+	mongoose.connect(process.env.MONGODB_URI, {
+		useNewUrlParser: true,
+		useCreateIndex: true,
+		useUnifiedTopology: true
+	})
 		.then(() => {
 			let system
 			

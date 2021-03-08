@@ -6,9 +6,15 @@ export default async (req, res) => {
 		name: String
 	})
 
+    const connectionParams = {
+		useNewUrlParser: true,
+		useCreateIndex: true,
+		useUnifiedTopology: true
+	}
+
     switch (req.method) {
         case "GET":
-            mongoose.connect(process.env.MONGODB_URI,process.env.CONN_PARAMS)
+            mongoose.connect(process.env.MONGODB_URI,connectionParams)
             .then(async ()=>{
                 let system
                 try {
