@@ -4,7 +4,7 @@ export default function Input({ setValue, onEnter, value, storedValues, list, on
 
 	return (
 		<>
-			<input type="text" value={value} onInput={(e) => changeSystem(e.target.value, list, onListClick)} onChange={(e) => { setValue(e.target.value)}} onKeyUp={(e) => { if (e.key === 'Enter') onEnter() }} list={list} placeholder={list} />
+			<input type="text" value={value} onInput={(e) => {if(onListClick) changeSystem(e.target.value, list, onListClick)}} onChange={(e) => { setValue(e.target.value)}} onKeyUp={(e) => { if (e.key === 'Enter') onEnter() }} list={list} placeholder={list} />
 			<datalist id={list}>
 				{systemsDom(storedValues)}
 			</datalist>
@@ -23,7 +23,6 @@ const changeSystem = (value, id, onListClick) => {
 	if (typeof document !== 'undefined') {
 		if (document.getElementById(id)) {
 			for (const child of document.getElementById(id).childNodes) {
-				console.log(value)
 				if (child.innerText === value) {
 					onListClick(child.dataset.system)
 					break;

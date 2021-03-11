@@ -2,7 +2,7 @@ import { Button, Input, InputDown } from "../atoms"
 import { useState, useEffect } from "react"
 import axios from "axios"
 import { useSelector, useDispatch } from "react-redux"
-import { getSystems} from "../../redux/actions/systems"
+import { getSystems } from "../../redux/actions/systems"
 
 const useGetSystems = () => {
 	return useSelector(state => {
@@ -37,10 +37,33 @@ const getSystem = async (systemName) => {
 	return systemData
 }
 
-const addSystem = async (systemName,dispatch) => {
+const addSystem = async (systemName, dispatch) => {
 	axios.post("api/systems", { systemName: systemName }).then(result => {
 		dispatch(getSystems(result.data))
 	})
+}
+
+const addBeacon = async (beaconName, systemName, dispatch) => {
+	axios.post("api/beacons", { beaconName: beaconName, systemName: systemName }).then(result => {
+		dispatch(getSystems(result.data))
+	})
+}
+
+const validateInput = (value) => {
+	if (typeof value === undefined || value === "") {
+		return false
+	}
+	else return true
+}
+
+const checkBeaconData = (beacons, systemInput, beaconInput) => {
+	let result = false
+	beacons.some(beacon => {
+		if (beacon.system === systemInput && beacon.name === beaconInput) {
+			result = true
+		}
+	})
+	return result
 }
 
 export default function AddRouteRow({ systems, setSystems }) {
@@ -49,50 +72,62 @@ export default function AddRouteRow({ systems, setSystems }) {
 	const [storedSystems, storedBeacons] = useGetData()
 	const dispatch = useDispatch()
 	const onEnter = () => {
-		getSystem(SystemInputValue).then((data) => {
-			let isInRedux = false
-			storedSystems.some(system => {
-				if (data.name === system.name) {
-					isInRedux = true
+		if (!validateInput(SystemInputValue) && !checkBeaconData(storedBeacons, SystemInputValue, BeaconInputValue)) {
+			alert("Sprawdz poprawność danych")
+		}
+		else {
+			getSystem(SystemInputValue).then((data) => {
+				if (validateInput(BeaconInputValue)) {
+					let beaconExistInRedux = false
+					storedBeacons.some(beacon => {
+						console.log(beacon)
+						if (beacon.name === BeaconInputValue) {
+							beaconExistInRedux = true
+						}
+					})
+					if (!beaconExistInRedux) {
+						addBeacon(BeaconInputValue, data.name, dispatch)
+					}
 				}
-			})
-			console.log(isInRedux)
-			if (systems.length) {
-				data.after = [systems[systems.length - 1].id]
-			}
-			else {
-				data.after = [-1]
-			}
-			
-			let systemExist = false
-			if (!data.name) {
-				systemExist = true
-			}
-			for (let system of systems) {
-				if (system.name === data.name) {
+				let systemExistInRedux = false
+				storedSystems.some(system => {
+					if (data.name === system.name) {
+						systemExistInRedux = true
+					}
+				})
+
+				if (systems.length) {
+					data.after = [systems[systems.length - 1].id]
+				}
+				else {
+					data.after = [-1]
+				}
+
+				let systemExist = false
+				if (!data.name) {
 					systemExist = true
 				}
-			}
-			if (!isInRedux) {
-				addSystem(data.name,dispatch)
-			}
-			if (!systemExist) {
-				setSystems([...systems, data])
-			}
-			setSystemInputValue("")
-			setBeaconInputValue("")
-		})
-	}
-
-	const onBeaconChange = (value) => {
-		console.log(value)
-		setSystemInputValue(value)
+				for (let system of systems) {
+					if (system.name === data.name) {
+						systemExist = true
+					}
+				}
+				if (!systemExistInRedux) {
+					addSystem(data.name, dispatch)
+				}
+				if (!systemExist) {
+					setSystems([...systems, data])
+				}
+				setSystemInputValue("")
+				setBeaconInputValue("")
+			})
+		}
 	}
 
 	return (
 		<div>
-			<Input setValue={setSystemInputValue} value={SystemInputValue} onEnter={onEnter} storedValues={storedSystems} list="systems"/>
-			<Input setValue={setBeaconInputValue} value={BeaconInputValue} onEnter={() => console.log("dupa")} storedValues={storedBeacons} list="beacons" onListClick={setSystemInputValue} />
+			<Input setValue={setSystemInputValue} value={SystemInputValue} onEnter={onEnter} storedValues={storedSystems} list="systems" />
+			<Input setValue={setBeaconInputValue} value={BeaconInputValue} onEnter={onEnter} storedValues={storedBeacons} list="beacons" onListClick={setSystemInputValue} />
 			<Button onClick={onEnter} >
 				➡️
 			</Button>

@@ -35,7 +35,7 @@ export default async (req, res) => {
                 catch(err){
                     beacon = new mongoose.model("Beacon", beaconSchema)
                 }
-				beacon.create({name:req.body.name, system:req.body.system}).then( async (result) => {
+				beacon.create({name:req.body.beaconName, system:req.body.systemName}).then( async (result) => {
 					let beacons = await beacon.find({})
 					res.send(beacons);
 				})
