@@ -54,7 +54,7 @@ export default function RouteCollection({ setSystemsToRoute, AllSystems, id, fir
 			<div>
 				<h3>{children}</h3>
 				{SystemDom}
-				<AddRouteRow systems={Systems} addSystem={setSystems} />
+				<AddRouteRow systems={Systems} setSystems={setSystems} />
 			</div>
 		)
 	}
@@ -64,7 +64,7 @@ export default function RouteCollection({ setSystemsToRoute, AllSystems, id, fir
 				<h3>{children}</h3>
 				{SystemDom}
 				{!Systems.length 
-				&& <AddRouteRow systems={Systems} addSystem={setSystems} />}
+				&& <AddRouteRow systems={Systems} setSystems={setSystems} />}
 			</div>
 		)
 	}

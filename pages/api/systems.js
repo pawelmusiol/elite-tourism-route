@@ -31,7 +31,23 @@ export default async (req, res) => {
             })
             break;
         case "POST":
-
+            mongoose.connect(process.env.MONGODB_URI,connectionParams)
+            .then(async ()=>{
+                let system
+                try {
+                    system = new mongoose.model("System")
+                }
+                catch(err){
+                    system = new mongoose.model("System", systemSchema)
+                }
+                system.create({name:req.body.systemName}).then(async (result) => {
+                    let systems = await system.find({})
+                    res.send(systems)
+                })
+            })
+            .catch(err => {
+                console.log(err)
+            })
         default:
             break;
     }

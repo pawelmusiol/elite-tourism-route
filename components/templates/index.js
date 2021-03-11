@@ -1,17 +1,20 @@
 import { RouteCollection, Result, AddRoutePanel } from "../organisms"
 import { useState, useEffect } from "react"
 import { useDispatch } from "react-redux"
-import { getSystems} from "../../redux/actions/systems"
+import { getSystems } from "../../redux/actions/systems"
+import { getBeacons } from "../../redux/actions//beacons"
 import axios from "axios"
 
-const useSystems = () => {
+const useReduxData = (action,route) => {
   let dispatch = useDispatch()
   useEffect(() => {
-    axios.get("api/systems").then((result) => {
-      dispatch(getSystems(result.data))
+    axios.get(route).then((result) => {
+      dispatch(action(result.data))
     })
   },[])
 }
+
+
 
 export default function Index() {
   const [NumberOfRoutes, setNumberOfRoutes] = useState(1)
@@ -19,8 +22,8 @@ export default function Index() {
   const [finalResult, setFinalResult] = useState()
   const RoutesDom = CreateRoutesDom(NumberOfRoutes, Systems, setSystems)
 
-  useSystems()
-
+  useReduxData(getSystems, "api/systems")
+  useReduxData(getBeacons, "api/beacons")
   return (
     <div id="main">
       <div id="sytems">
