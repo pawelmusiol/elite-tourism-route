@@ -5,13 +5,13 @@ import { getSystems } from "../../redux/actions/systems"
 import { getBeacons } from "../../redux/actions//beacons"
 import axios from "axios"
 
-const useReduxData = (action,route) => {
+const useReduxData = (action, route) => {
   let dispatch = useDispatch()
   useEffect(() => {
     axios.get(route).then((result) => {
       dispatch(action(result.data))
     })
-  },[])
+  }, [])
 }
 
 
@@ -32,7 +32,9 @@ export default function Index() {
         {RoutesDom}
         <button onClick={() => setFinalResult(getRoute(Systems))}>Calculate</button>
       </div>
-      <Result data={finalResult} id="Result" />
+      {typeof finalResult !== "undefined" &&
+        <Result data={finalResult} id="Result" />
+  }
       <style jsx>{`
         #main{
           gap: 5%;
@@ -173,13 +175,17 @@ const getRoute = (systems) => {
   let combinations = getCombinations(SystemsData.length, SystemsData)
   let routes = getAllRoute(combinations, distances)
   let bestRoute = getBestRoute(routes)
-  return getSystemsNames(bestRoute, SystemsData)
+  let result 
+  if (bestRoute) {
+    result = getSystemsNames(bestRoute, SystemsData)
+  }
+  console.log(result)
+  return result
 }
 
 //Get Name of systems to result
 const getSystemsNames = (route, SystemsData) => {
   let SystemNames = []
-
   for (let i = 0; i < route.combination.length; i++) {
     for (let j = 0; j < SystemsData.length; j++) {
       if (route.combination[i] === j) {
