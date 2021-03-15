@@ -66,8 +66,7 @@ const checkBeaconData = (beacons, systemInput, beaconInput) => {
 	})
 	return result
 }
-
-export default function AddRouteRow({ systems, setSystems, add }) {
+export default function AddRouteRow({ systems, setSystems, start, add }) {
 	const [SystemInputValue, setSystemInputValue] = useState("")
 	const [BeaconInputValue, setBeaconInputValue] = useState("")
 	const [storedSystems, storedBeacons] = useGetData()

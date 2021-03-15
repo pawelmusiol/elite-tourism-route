@@ -46,7 +46,7 @@ export default function RouteCollection({ setSystemsToRoute, AllSystems, id, fir
 	}
 
 
-	const SystemDom = Systems.map((system, index) => <DataRow id={index} changePosition={swapPosition}>{system.name}</DataRow>)
+	const SystemDom = Systems.map((system, index) => <DataRow id={index} key={index} changePosition={swapPosition}>{system.name}</DataRow>)
 
 
 	if (!first) {
@@ -64,7 +64,7 @@ export default function RouteCollection({ setSystemsToRoute, AllSystems, id, fir
 				<h3>{children}</h3>
 				{SystemDom}
 				{!Systems.length 
-				&& <AddRouteRow systems={Systems} setSystems={setSystems} />}
+				&& <AddRouteRow start systems={Systems} setSystems={setSystems} />}
 			</div>
 		)
 	}
