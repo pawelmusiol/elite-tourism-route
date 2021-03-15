@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import { useSelector, useDispatch } from "react-redux"
 import { getSystems } from "../../redux/actions/systems"
+import { getBeacons } from "../../redux/actions/beacons"
 
 const useGetSystems = () => {
 	return useSelector(state => {
@@ -45,7 +46,7 @@ const addSystem = async (systemName, dispatch) => {
 
 const addBeacon = async (beaconName, systemName, dispatch) => {
 	axios.post("api/beacons", { beaconName: beaconName, systemName: systemName }).then(result => {
-		dispatch(getSystems(result.data))
+		dispatch(getBeacons(result.data))
 	})
 }
 
@@ -66,12 +67,14 @@ const checkBeaconData = (beacons, systemInput, beaconInput) => {
 	return result
 }
 
-export default function AddRouteRow({ systems, setSystems }) {
+export default function AddRouteRow({ systems, setSystems, add }) {
 	const [SystemInputValue, setSystemInputValue] = useState("")
 	const [BeaconInputValue, setBeaconInputValue] = useState("")
 	const [storedSystems, storedBeacons] = useGetData()
+	const [Trigger, setTrigger] = useState(true)
 	const dispatch = useDispatch()
-	const onEnter = () => {
+
+	const addToDatabase = () => {
 		if (!validateInput(SystemInputValue) && !checkBeaconData(storedBeacons, SystemInputValue, BeaconInputValue)) {
 			alert("Sprawdz poprawność danych")
 		}
@@ -80,13 +83,13 @@ export default function AddRouteRow({ systems, setSystems }) {
 				if (validateInput(BeaconInputValue)) {
 					let beaconExistInRedux = false
 					storedBeacons.some(beacon => {
-						console.log(beacon)
 						if (beacon.name === BeaconInputValue) {
 							beaconExistInRedux = true
 						}
 					})
 					if (!beaconExistInRedux) {
 						addBeacon(BeaconInputValue, data.name, dispatch)
+						setTrigger(!Trigger)
 					}
 				}
 				let systemExistInRedux = false
@@ -95,42 +98,91 @@ export default function AddRouteRow({ systems, setSystems }) {
 						systemExistInRedux = true
 					}
 				})
-
-				if (systems.length) {
-					data.after = [systems[systems.length - 1].id]
-				}
-				else {
-					data.after = [-1]
-				}
-
-				let systemExist = false
-				if (!data.name) {
-					systemExist = true
-				}
-				for (let system of systems) {
-					if (system.name === data.name) {
-						systemExist = true
-					}
-				}
 				if (!systemExistInRedux) {
 					addSystem(data.name, dispatch)
+					setTrigger(!Trigger)
 				}
-				if (!systemExist) {
-					setSystems([...systems, data])
-				}
+
 				setSystemInputValue("")
 				setBeaconInputValue("")
 			})
 		}
 	}
+	let onEnter
+	if (systems) {
+		onEnter = () => {
+			if (!validateInput(SystemInputValue) && !checkBeaconData(storedBeacons, SystemInputValue, BeaconInputValue)) {
+				alert("Sprawdz poprawność danych")
+			}
+			else {
+				getSystem(SystemInputValue).then((data) => {
+					if (validateInput(BeaconInputValue)) {
+						let beaconExistInRedux = false
+						storedBeacons.some(beacon => {
+							console.log(beacon)
+							if (beacon.name === BeaconInputValue) {
+								beaconExistInRedux = true
+							}
+						})
+						if (!beaconExistInRedux) {
+							addBeacon(BeaconInputValue, data.name, dispatch)
+						}
+					}
+					let systemExistInRedux = false
+					storedSystems.some(system => {
+						if (data.name === system.name) {
+							systemExistInRedux = true
+						}
+					})
+
+					if (systems.length) {
+						data.after = [systems[systems.length - 1].id]
+					}
+					else {
+						data.after = [-1]
+					}
+
+					let systemExist = false
+					if (!data.name) {
+						systemExist = true
+					}
+					for (let system of systems) {
+						if (system.name === data.name) {
+							systemExist = true
+						}
+					}
+					if (!systemExistInRedux) {
+						addSystem(data.name, dispatch)
+					}
+					if (!systemExist) {
+						setSystems([...systems, data])
+					}
+					setSystemInputValue("")
+					setBeaconInputValue("")
+				})
+			}
+		}
+	}
 
 	return (
 		<div>
-			<Input setValue={setSystemInputValue} value={SystemInputValue} onEnter={onEnter} storedValues={storedSystems} list="systems" />
-			<Input setValue={setBeaconInputValue} value={BeaconInputValue} onEnter={onEnter} storedValues={storedBeacons} list="beacons" onListClick={setSystemInputValue} />
-			<Button onClick={onEnter} >
-				➡️
-			</Button>
+			{add ?
+				<>
+					<Input setValue={setSystemInputValue} value={SystemInputValue} onEnter={addToDatabase} storedValues={storedSystems} list="systems" />
+					<Input setValue={setBeaconInputValue} value={BeaconInputValue} onEnter={addToDatabase} storedValues={storedBeacons} list="beacons" onListClick={setSystemInputValue} />
+					<Button onClick={addToDatabase} >
+						➡️
+					</Button>
+				</>
+				:
+				<>
+					<Input setValue={setSystemInputValue} value={SystemInputValue} onEnter={onEnter} storedValues={storedSystems} list="systems" />
+					<Input setValue={setBeaconInputValue} value={BeaconInputValue} onEnter={onEnter} storedValues={storedBeacons} list="beacons" onListClick={setSystemInputValue} />
+					<Button onClick={onEnter} >
+						➡️
+					</Button>
+				</>
+			}
 			<style jsx>{`
 				div{
 					display:inline-flex;

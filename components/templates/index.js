@@ -1,20 +1,18 @@
-import { RouteCollection, Result, AddRoutePanel } from "../organisms"
+import { RouteCollection, Result, AddRoutePanel, AddBeacon } from "../organisms"
 import { useState, useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { getSystems } from "../../redux/actions/systems"
 import { getBeacons } from "../../redux/actions//beacons"
 import axios from "axios"
 
-const useReduxData = (action,route) => {
+const useReduxData = (action, route) => {
   let dispatch = useDispatch()
   useEffect(() => {
     axios.get(route).then((result) => {
       dispatch(action(result.data))
     })
-  },[])
+  }, [])
 }
-
-
 
 export default function Index() {
   const [NumberOfRoutes, setNumberOfRoutes] = useState(1)
@@ -30,6 +28,10 @@ export default function Index() {
         <AddRoutePanel Routes={NumberOfRoutes} setRoutes={setNumberOfRoutes} />
         <RouteCollection key={0} id={0} AllSystems={Systems} setSystemsToRoute={setSystems} first >System Startowy</RouteCollection>
         {RoutesDom}
+        <div>
+          <p>Dodaj punkt do bazy</p>
+          <AddBeacon/>
+        </div>
         <button onClick={() => setFinalResult(getRoute(Systems))}>Calculate</button>
       </div>
       <Result data={finalResult} id="Result" />
