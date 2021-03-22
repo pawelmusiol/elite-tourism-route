@@ -14,8 +14,10 @@ export default function result({ data }) {
 			<style jsx>{`
 				#result{
 					display:grid;
-					grid-template:"jumps systems" "distance systems";
-					width:100%;
+					grid-template:"distance systems" "jumps systems" "jumps systems";
+					background-color: #444;
+					padding: 0 2% 2% 2%;
+					align-items: center;
 				}
 				`}</style>
 		</div>
@@ -41,7 +43,9 @@ const formatData = (data, setSystemsDom, setJumpsDom) => {
 }
 
 const setSystems = (Systems) => {
-	return Systems.map(system => <p><a target="_blank" href={"https://www.edsm.net/en/system/id/" + system.id + "/name/" + system.name}>{system.name}</a></p>)
+	return Systems.map(system => <p><a target="_blank" href={"https://www.edsm.net/en/system/id/" + system.id + "/name/" + system.name}>{system.name}
+	<sup><i className="fas fa-external-link-alt"></i></sup>
+	</a></p>)
 
 }
 

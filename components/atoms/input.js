@@ -9,7 +9,9 @@ export default function Input({ setValue, onEnter, value, storedValues, list, on
 				{systemsDom(storedValues)}
 			</datalist>
 			<style jsx>{`
-
+					input{
+						
+					}
 				`}</style>
 		</>
 	)

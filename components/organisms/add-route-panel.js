@@ -2,7 +2,7 @@ import {AddRoute} from "../molecules"
 
 export default function addRoutePanel({Routes, setRoutes, SystemNames}){    
     return (
-        <div>
+        <div id="routes-count">
             <p>{Routes} {RoutesText(Routes)}</p>
             <AddRoute Route={Routes} setRoute={setRoutes} />
         </div>

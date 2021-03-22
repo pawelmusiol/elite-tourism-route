@@ -1,4 +1,4 @@
-import { RouteCollection, Result, AddRoutePanel, AddBeacon } from "../organisms"
+import { RouteCollection, Result, AddRoutePanel, AddBeacon, SubmitButton } from "../organisms"
 import { useState, useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { getSystems } from "../../redux/actions/systems"
@@ -16,32 +16,51 @@ const useReduxData = (action, route) => {
 
 export default function Index() {
   const [NumberOfRoutes, setNumberOfRoutes] = useState(1)
+  const [Layout, setLayout] = useState("auto")
   const [Systems, setSystems] = useState([])
   const [finalResult, setFinalResult] = useState()
   const RoutesDom = CreateRoutesDom(NumberOfRoutes, Systems, setSystems)
+
+  useEffect(() => {
+    if (NumberOfRoutes > 1) {
+      setLayout("auto auto")
+    }
+  }, [NumberOfRoutes])
 
   useReduxData(getSystems, "api/systems")
   useReduxData(getBeacons, "api/beacons")
   return (
     <div id="main">
       <div id="sytems">
-        <AddRoutePanel Routes={NumberOfRoutes} setRoutes={setNumberOfRoutes} />
         <RouteCollection key={0} id={0} AllSystems={Systems} setSystemsToRoute={setSystems} first >System Startowy</RouteCollection>
-        {RoutesDom}
-        <div>
-          <p>Dodaj punkt do bazy</p>
-          <AddBeacon/>
+        <AddRoutePanel Routes={NumberOfRoutes} setRoutes={setNumberOfRoutes} />
+        <div id="routes">
+          {RoutesDom}
         </div>
-        <button onClick={() => setFinalResult(getRoute(Systems))}>Calculate</button>
+          <SubmitButton onClick={() => setFinalResult(getRoute(Systems))} />
       </div>
       {typeof finalResult !== "undefined" &&
         <Result data={finalResult} id="Result" />
-  }
+      }
+      <div>
+        <AddBeacon />
+      </div>
       <style jsx>{`
+        .submit{
+          font-size: 2rem;
+          padding:1%;
+          width:100%;
+        }
         #main{
           gap: 5%;
           display:flex;
           width: 100%;
+          flex-direction:column;
+        }
+        #routes{
+          display: grid;
+          grid-template-columns: ${Layout};
+          grid-gap: 10px;
         }
         `}</style>
     </div>
@@ -177,7 +196,7 @@ const getRoute = (systems) => {
   let combinations = getCombinations(SystemsData.length, SystemsData)
   let routes = getAllRoute(combinations, distances)
   let bestRoute = getBestRoute(routes)
-  let result 
+  let result
   if (bestRoute) {
     result = getSystemsNames(bestRoute, SystemsData)
   }

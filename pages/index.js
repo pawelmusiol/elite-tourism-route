@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Index from '../components/templates/'
 
-import { Provider} from "react-redux"
+import { Provider } from "react-redux"
 import { store } from "../redux/store"
 //import Database from "./api/database"
 
@@ -11,7 +11,10 @@ import { store } from "../redux/store"
 export default function Home() {
   return (
     <Provider store={store}>
-      <Index/>
+      <Head>
+      <script src="https://kit.fontawesome.com/9c62f72f52.js" crossorigin="anonymous"></script>
+      </Head>
+      <Index />
     </Provider>
   )
 }
