@@ -100,6 +100,7 @@ const CheckIfIsInArray = (array, index) => {
 
 //One function to rule them all XD
 const getRoute = (systems) => {
+  alert = ""
   let SystemsData = SystemsDataToArray(systems)
   let distances = getDistanceBetweenSystems(SystemsData)
   let combinations = getCombinations(SystemsData.length, SystemsData)
