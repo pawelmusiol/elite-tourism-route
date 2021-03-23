@@ -64,7 +64,7 @@ export default function RouteCollection({ setSystemsToRoute, AllSystems, id, fir
 				<style jsx>{`
 					.route{
 						background-color: #444;
-						padding: 2%;
+						padding: 1%;
 					}
 					.route > h3 {
 						margin-top:0;

@@ -32,7 +32,7 @@ export default function Index() {
       setLayout("50% 50%")
     }
     if (window.innerWidth <= 1000) {
-      setLayout("auto")
+      setLayout("100%")
     }
   }, [NumberOfRoutes])
 

@@ -182,8 +182,9 @@ export default function AddRouteRow({ systems, setSystems, add, addColor }) {
 			<style jsx>{`
 				div{
 					display:inline-flex;
-					//border: 2px solid #E18100;
+					width:100%;
 					}
+				
 				`}</style>
 		</div >
 	)
