@@ -1,4 +1,4 @@
-import { RouteCollection, Result, AddRoutePanel, AddBeacon, SubmitButton } from "../organisms"
+import { RouteCollection, Result, AddRoutePanel, AddBeacon, SubmitPanel } from "../organisms"
 import { useState, useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { getSystems } from "../../redux/actions/systems"
@@ -37,7 +37,7 @@ export default function Index() {
         <div id="routes">
           {RoutesDom}
         </div>
-          <SubmitButton onClick={() => setFinalResult(getRoute(Systems))} />
+          <SubmitPanel onClick={() => setFinalResult(getRoute(Systems))} />
       </div>
       {typeof finalResult !== "undefined" &&
         <Result data={finalResult} id="Result" />

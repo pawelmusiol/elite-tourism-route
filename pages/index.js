@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <Provider store={store}>
       <Head>
-      <script src="https://kit.fontawesome.com/9c62f72f52.js" crossorigin="anonymous"></script>
+      <script src="https://kit.fontawesome.com/9c62f72f52.js" crossOrigin="anonymous"></script>
       </Head>
       <Index />
     </Provider>
