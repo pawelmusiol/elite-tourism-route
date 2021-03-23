@@ -6,7 +6,7 @@ export default function submitButton({ onClick }) {
             <Button onClick={onClick} id="submit-button">Oblicz</Button>
             <style jsx>{`
                 div{
-                    margin-top: 10px;
+                    margin: 10px 0;
                     display:flex;
                     align-items: center;
                     justify-content: center;

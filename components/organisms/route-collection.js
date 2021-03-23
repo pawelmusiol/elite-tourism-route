@@ -45,8 +45,13 @@ export default function RouteCollection({ setSystemsToRoute, AllSystems, id, fir
 		}
 	}
 
+	const deleteItem = (id) => {
+		let array = [...Systems]
+		array.splice(id,1)
+		setSystems(array)
+	}
 
-	const SystemDom = Systems.map((system, index) => <DataRow id={index} key={index} changePosition={swapPosition}>{system.name}</DataRow>)
+	const SystemDom = Systems.map((system, index) => <DataRow id={index} key={index} changePosition={swapPosition} deleteItem={deleteItem}>{system.name}</DataRow>)
 
 
 	if (!first) {

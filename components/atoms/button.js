@@ -16,6 +16,7 @@ export default function Button({id, children, onClick, addColor}){
             
             <style jsx>{`
                 .submit {
+					cursor: pointer;
                     position:relative;
                     transition:.2s ease-in;
                 }

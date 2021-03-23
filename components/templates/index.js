@@ -14,6 +14,12 @@ const useReduxData = (action, route) => {
   }, [])
 }
 
+const handleError = (res) => {
+  if (res.data.alert) {
+    alert(res.data.alert)
+  }
+}
+
 export default function Index() {
   const [NumberOfRoutes, setNumberOfRoutes] = useState(1)
   const [Layout, setLayout] = useState("auto")
@@ -23,7 +29,7 @@ export default function Index() {
 
   useEffect(() => {
     if (NumberOfRoutes > 1 && window.innerWidth > 1000) {
-      setLayout("auto auto")
+      setLayout("50% 50%")
     }
     if (window.innerWidth <= 1000) {
       setLayout("auto")
@@ -40,7 +46,10 @@ export default function Index() {
         <div id="routes">
           {RoutesDom}
         </div>
-          <SubmitPanel onClick={() => axios.post("api/calculate",{systems: Systems}).then((res) => setFinalResult(res.data))} />
+          <SubmitPanel onClick={() => axios.post("api/calculate",{systems: Systems}).then((res) => {
+          handleError(res)
+          setFinalResult(res.data.result)
+          })} />
       </div>
       {typeof finalResult !== "undefined" &&
         <Result data={finalResult} id="Result" />

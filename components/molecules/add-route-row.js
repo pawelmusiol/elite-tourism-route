@@ -70,7 +70,6 @@ export default function AddRouteRow({ systems, setSystems, add, addColor }) {
 	const [SystemInputValue, setSystemInputValue] = useState("")
 	const [BeaconInputValue, setBeaconInputValue] = useState("")
 	const [storedSystems, storedBeacons] = useGetData()
-	const [Trigger, setTrigger] = useState(true)
 	const dispatch = useDispatch()
 
 	const addToDatabase = () => {
@@ -88,7 +87,6 @@ export default function AddRouteRow({ systems, setSystems, add, addColor }) {
 					})
 					if (!beaconExistInRedux) {
 						addBeacon(BeaconInputValue, data.name, dispatch)
-						setTrigger(!Trigger)
 					}
 				}
 				let systemExistInRedux = false
@@ -99,7 +97,6 @@ export default function AddRouteRow({ systems, setSystems, add, addColor }) {
 				})
 				if (!systemExistInRedux) {
 					addSystem(data.name, dispatch)
-					setTrigger(!Trigger)
 				}
 
 				setSystemInputValue("")
