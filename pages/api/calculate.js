@@ -1,4 +1,4 @@
-let alert
+let alert = ""
 
 //Complete Data Together
 const SystemsDataToArray = (Systems) => {
@@ -305,7 +305,7 @@ export default async (req, res) => {
   switch (req.method) {
     case "POST":
       let result = getRoute(req.body.systems)
-      if (alert) {
+      if (alert !== "") {
         res.status(200).send({ result: result, alert: alert })
       }
       else {
