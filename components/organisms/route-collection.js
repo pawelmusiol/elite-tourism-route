@@ -50,16 +50,16 @@ export default function RouteCollection({ setSystemsToRoute, AllSystems, id, fir
 
 
 	if (!first) {
+
 		return (
 			<div className="route">
 				<h3>{children}</h3>
 				{SystemDom}
-				<AddRouteRow systems={Systems} setSystems={setSystems} />
+				<AddRouteRow systems={Systems} setSystems={setSystems} addColor="#444" />
 				<style jsx>{`
 					.route{
 						background-color: #444;
 						padding: 2%;
-						
 					}
 					.route > h3 {
 						margin-top:0;
@@ -74,7 +74,7 @@ export default function RouteCollection({ setSystemsToRoute, AllSystems, id, fir
 				<h3>{children}</h3>
 				{SystemDom}
 				{!Systems.length 
-				&& <AddRouteRow start systems={Systems} setSystems={setSystems} />}
+				&& <AddRouteRow start systems={Systems} setSystems={setSystems} addColor="#333" />}
 			</div>
 		)
 	}

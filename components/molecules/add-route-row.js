@@ -66,7 +66,7 @@ const checkBeaconData = (beacons, systemInput, beaconInput) => {
 	})
 	return result
 }
-export default function AddRouteRow({ systems, setSystems, add }) {
+export default function AddRouteRow({ systems, setSystems, add, addColor }) {
 	const [SystemInputValue, setSystemInputValue] = useState("")
 	const [BeaconInputValue, setBeaconInputValue] = useState("")
 	const [storedSystems, storedBeacons] = useGetData()
@@ -169,7 +169,7 @@ export default function AddRouteRow({ systems, setSystems, add }) {
 				<>
 					<Input setValue={setSystemInputValue} value={SystemInputValue} onEnter={addToDatabase} storedValues={storedSystems} list="systems" />
 					<Input setValue={setBeaconInputValue} value={BeaconInputValue} onEnter={addToDatabase} storedValues={storedBeacons} list="beacons" onListClick={setSystemInputValue} />
-					<Button onClick={addToDatabase} >
+					<Button onClick={addToDatabase} addColor={addColor}>
 						Dodaj 🡆
 					</Button>
 				</>
@@ -177,7 +177,7 @@ export default function AddRouteRow({ systems, setSystems, add }) {
 				<>
 					<Input setValue={setSystemInputValue} value={SystemInputValue} onEnter={onEnter} storedValues={storedSystems} list="systems" />
 					<Input setValue={setBeaconInputValue} value={BeaconInputValue} onEnter={onEnter} storedValues={storedBeacons} list="beacons" onListClick={setSystemInputValue} />
-					<Button onClick={onEnter} >
+					<Button onClick={onEnter} addColor={addColor}>
 						Dodaj 🡆
 					</Button>
 				</>
@@ -186,7 +186,7 @@ export default function AddRouteRow({ systems, setSystems, add }) {
 				div{
 					display:inline-flex;
 					//border: 2px solid #E18100;
-				}
+					}
 				`}</style>
 		</div >
 	)

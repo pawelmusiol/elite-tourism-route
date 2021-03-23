@@ -1,6 +1,10 @@
-export default function Button({children, onClick}){
-	return (
-        <button className="submit" onClick={onClick}>
+export default function Button({id, children, onClick, addColor}){
+    let afterColor = "#333"
+    if (addColor) {
+        afterColor = addColor
+    }
+    return (
+        <button className={"submit"} id={id} onClick={onClick}>
             <span className="test">
                 {children}
             </span>
@@ -15,6 +19,25 @@ export default function Button({children, onClick}){
                     position:relative;
                     transition:.2s ease-in;
                 }
+                .submit::before{
+                    z-index: 1;
+                    content:"";
+                    background-color: ${afterColor};
+                    width:5px;
+                    height:5px;
+                    position:absolute;
+                    left:-2px;
+                    top:-2px;
+                }
+                .submit::after{
+                    content:"";
+                    background-color: ${afterColor};
+                    width:5px;
+                    height:5px;
+                    position:absolute;
+                    right:-2px;
+                    bottom:-2px;
+                }
                 .test{
                     visibility:hidden;
                 }
@@ -28,9 +51,9 @@ export default function Button({children, onClick}){
                     display:block;
                     transition: .2s ease-in;
                     padding: 2px 0px;
-                    color: rgba(255,255,255,0);
-                    
+                    color: rgba(255,255,255,0);    
                 }
+
                 .main-text{
                     top: -1px;
                     left: -1px;
@@ -49,6 +72,21 @@ export default function Button({children, onClick}){
                     transition: .2s ease-out;
                     color: #333;
                 }
+                #submit-button {
+                    width:50%;
+                    font-size: 2rem;
+                }
+                #submit-button .przeslona {
+                    transition: .3s ease-in;                   
+                }
+                #submit-button:hover .przeslona {
+                    transition: .3s ease-out;                   
+                }
+                #submit-button .main-text {
+                    margin-left:50%;
+                    transform: translateX(-50%);
+                }
+
             `}</style>
         </button>
     )

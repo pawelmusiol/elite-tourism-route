@@ -31,7 +31,7 @@ const useRouteData = (data) => {
 	useEffect(() => {
 		if (data) {
 			formatData(data, setSystemsDom, setJumpsDom)
-			setDistance(Math.floor(data.distance*100)/100 + " Ly")
+			setDistance(Math.floor(data.distance * 100) / 100 + " Ly")
 		}
 	}, [data])
 	return [SystemsDom, JumpsDom, Distance]
@@ -43,9 +43,15 @@ const formatData = (data, setSystemsDom, setJumpsDom) => {
 }
 
 const setSystems = (Systems) => {
-	return Systems.map(system => <p><a target="_blank" href={"https://www.edsm.net/en/system/id/" + system.id + "/name/" + system.name}>{system.name}
-	<sup><i className="fas fa-external-link-alt"></i></sup>
-	</a></p>)
+	return Systems.map((system, index) => <p><a key={index} target="_blank" href={"https://www.edsm.net/en/system/id/" + system.id + "/name/" + system.name}>{system.name}
+		<sup><i className="fas fa-external-link-alt"></i></sup>
+	</a>
+		<style jsx>{`
+			a{
+				color: #E18100
+			}
+		`}</style>
+	</p>)
 
 }
 
