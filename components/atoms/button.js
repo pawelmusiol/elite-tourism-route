@@ -39,6 +39,14 @@ export default function Button({id, children, onClick, addColor}){
                     right:-2px;
                     bottom:-2px;
                 }
+                .submit:hover:after{
+                    background: #fff;
+                    transition: .18s ease-in;
+                }
+                .submit:hover:before{
+                    background:#E18100;
+                    transition: .1s ease-in;
+                }
                 .test{
                     visibility:hidden;
                 }

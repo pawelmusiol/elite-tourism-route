@@ -3,7 +3,7 @@ import { AddRouteRow } from "../molecules"
 export default function AddBeacon({}){
     return(
         <div>
-            <h1>Dodaj punkt do bazy</h1>
+            <h2>Dodaj punkt do bazy</h2>
         <AddRouteRow add addColor="#333"/>
         </div>
     )

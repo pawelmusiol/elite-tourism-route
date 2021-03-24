@@ -1,4 +1,4 @@
-import { RouteCollection, Result, AddRoutePanel, AddBeacon, SubmitPanel } from "../organisms"
+import { RouteCollection, Result, AddRoutePanel, AddBeacon, SubmitPanel, TopBar } from "../organisms"
 import { useState, useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { getSystems } from "../../redux/actions/systems"
@@ -25,7 +25,16 @@ export default function Index() {
   const [Layout, setLayout] = useState("auto")
   const [Systems, setSystems] = useState([])
   const [finalResult, setFinalResult] = useState()
-  const RoutesDom = CreateRoutesDom(NumberOfRoutes, Systems, setSystems)
+  const [Reset, setReset] = useState(false)
+  const RoutesDom = CreateRoutesDom(NumberOfRoutes, Systems, setSystems, Reset)
+
+  const resetValues = () => {
+    setNumberOfRoutes(1)
+    setLayout("auto")
+    setSystems([])
+    setFinalResult(undefined)
+    setReset(!Reset)
+  }
 
   useEffect(() => {
     if (NumberOfRoutes > 1 && window.innerWidth > 1000) {
@@ -40,8 +49,9 @@ export default function Index() {
   useReduxData(getBeacons, "api/beacons")
   return (
     <div id="main">
+      <TopBar reset={resetValues}/>
       <div id="sytems">
-        <RouteCollection key={0} id={0} AllSystems={Systems} setSystemsToRoute={setSystems} first >System Startowy</RouteCollection>
+        <RouteCollection key={0} id={0} AllSystems={Systems} setSystemsToRoute={setSystems} first reset={Reset} >System Startowy</RouteCollection>
         <AddRoutePanel Routes={NumberOfRoutes} setRoutes={setNumberOfRoutes} />
         <div id="routes">
           {RoutesDom}
@@ -65,6 +75,7 @@ export default function Index() {
         }
         #main{
           gap: 5%;
+          margin-top: calc(30px + 3rem); 
           display:flex;
           width: 100%;
           flex-direction:column;
@@ -79,10 +90,10 @@ export default function Index() {
   )
 }
 
-const CreateRoutesDom = (count, Systems, setSystems) => {
+const CreateRoutesDom = (count, Systems, setSystems, Reset) => {
   let RoutesDom = []
   for (let i = 0; i < count; i++) {
-    RoutesDom.push(<RouteCollection key={i + 1} id={i + 1} AllSystems={Systems} setSystemsToRoute={setSystems}>Droga nr {i + 1}</RouteCollection>)
+    RoutesDom.push(<RouteCollection key={i + 1} id={i + 1} AllSystems={Systems} reset={Reset} setSystemsToRoute={setSystems}>Droga nr {i + 1}</RouteCollection>)
   }
   return RoutesDom
 }

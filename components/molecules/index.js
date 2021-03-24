@@ -4,6 +4,7 @@ import DataRow from "./data-row"
 import ResultBox from "./result-box"
 import AddRoute from "./add-route"
 import SubmitButton from "./submit-button"
+import Menu from "./menu"
 
 export {
 	AddRow,
@@ -11,5 +12,6 @@ export {
 	DataRow,
 	ResultBox,
 	AddRoute,
-	SubmitButton
+	SubmitButton,
+	Menu
 }

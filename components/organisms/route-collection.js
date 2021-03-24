@@ -3,9 +3,14 @@ import { DataRow, AddRouteRow } from "../molecules"
 
 
 
-export default function RouteCollection({ setSystemsToRoute, AllSystems, id, first, children }) {
+export default function RouteCollection({ setSystemsToRoute, reset, AllSystems, id, first, children }) {
 	const [NumberOfRows, setNumberOfRows] = useState(1)
 	const [Systems, setSystems] = useState([])
+
+	useEffect(() => {
+		setNumberOfRows(1)
+		setSystems([])
+	},[reset])
 
 	useEffect(() => {
 		let CurrentCollection = { id: id, Systems: Systems }
@@ -23,7 +28,7 @@ export default function RouteCollection({ setSystemsToRoute, AllSystems, id, fir
 		else {
 			setSystemsToRoute([...AllSystems, CurrentCollection])
 		}
-
+		
 
 	}, [Systems])
 
