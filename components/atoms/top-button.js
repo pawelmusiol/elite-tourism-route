@@ -4,6 +4,7 @@ export default function TopButton({ onClick, children }) {
             {children}
             <style jsx>{`
                 button{
+                    cursor:pointer;
                     border: none;
                     border-left: 2px solid black;
                     margin: 10px 0;

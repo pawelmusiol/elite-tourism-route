@@ -1,4 +1,4 @@
-import { RouteCollection, Result, AddRoutePanel, AddBeacon, SubmitPanel, TopBar } from "../organisms"
+import { RouteCollection, Result, AddRoutePanel, AddBeacon, SubmitPanel, TopBar, Login } from "../organisms"
 import { useState, useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { getSystems } from "../../redux/actions/systems"
@@ -26,6 +26,7 @@ export default function Index() {
   const [Systems, setSystems] = useState([])
   const [finalResult, setFinalResult] = useState()
   const [Reset, setReset] = useState(false)
+  const [LoginVisibility, setLoginVisibility] = useState("none");
   const RoutesDom = CreateRoutesDom(NumberOfRoutes, Systems, setSystems, Reset)
 
   const resetValues = () => {
@@ -49,7 +50,7 @@ export default function Index() {
   useReduxData(getBeacons, "api/beacons")
   return (
     <div id="main">
-      <TopBar reset={resetValues}/>
+      <TopBar reset={resetValues} setVisibility={setLoginVisibility} />
       <div id="sytems">
         <RouteCollection key={0} id={0} AllSystems={Systems} setSystemsToRoute={setSystems} first reset={Reset} >System Startowy</RouteCollection>
         <AddRoutePanel Routes={NumberOfRoutes} setRoutes={setNumberOfRoutes} />
@@ -67,6 +68,8 @@ export default function Index() {
       <div>
         <AddBeacon />
       </div>
+      <Login Visibility={LoginVisibility} setVisibility={setLoginVisibility} />
+
       <style jsx>{`
         .submit{
           font-size: 2rem;

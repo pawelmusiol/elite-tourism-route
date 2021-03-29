@@ -1,12 +1,12 @@
 import { Menu } from "../molecules"
-import { Title } from "../atoms"
-export default function TopBar({ reset }) {
+import { Title, Button } from "../atoms"
+export default function TopBar({ reset, setVisibility }) {
     return (
         <div className="bar">
             <div className="outer">
                 <div className="inner">
                     <Title className="logo">Elite Route Creator</Title>
-                    <Menu reset={reset} />
+                    <Menu reset={reset} setVisibility={setVisibility} />
                 </div>
             </div>
             <style jsx>{`
