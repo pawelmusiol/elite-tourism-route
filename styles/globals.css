@@ -8,6 +8,10 @@ body {
     letter-spacing: 0.1em;
 }
 
+html, body, button, input {
+    font-family: 'Bebas Neue', cursive;
+}
+
 button {
     color: #E18100;
     background: none;
@@ -21,4 +25,39 @@ button {
 
 .logo{
     margin: 0;
+}
+
+.menu-exit{
+    float:right;
+}
+
+.login-input{
+    background:#222;
+    border: none;
+    margin: 2% 10%;
+    font-size: 1.4rem;
+    padding: 2%;
+    color: #ccc;
+}
+.login-button{
+    margin: 2% 10%;
+    font-size: 1.6rem !important;
+    width:80% !important;
+}
+
+.register-button{
+    color:#e00000;
+    border: 2px solid #e00000;
+}
+
+.register-button:hover .main-text{
+    color: #aaa !important;
+}
+
+.register-button:hover::before {
+    background-color: #e00000 !important;
+}
+
+.register-button .przeslona{
+    background-color: #e00000 !important;
 }

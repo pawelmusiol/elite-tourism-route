@@ -6,7 +6,7 @@ export default function TopBar({ reset, setVisibility }) {
             <div className="outer">
                 <div className="inner">
                     <Title className="logo">Elite Route Creator</Title>
-                    <Menu reset={reset} setVisibility={setVisibility} />
+                    <Menu setVisibility={setVisibility} />
                 </div>
             </div>
             <style jsx>{`

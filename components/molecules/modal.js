@@ -1,5 +1,3 @@
-import { useState } from "react"
-
 export default function Modal({ children, Visibility, setVisibility }) {
 
 	const CloseModal = (e) => {
@@ -19,6 +17,7 @@ export default function Modal({ children, Visibility, setVisibility }) {
 
 	return (
 		<div id="login-modal" onClick={CloseModal}>
+		
 			{children}
 			<style jsx>{`
 				div{

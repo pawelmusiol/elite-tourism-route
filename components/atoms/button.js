@@ -1,10 +1,10 @@
-export default function Button({id, children, onClick, addColor}){
+export default function Button({id, children, onClick, addColor, className }){
     let afterColor = "#333"
     if (addColor) {
         afterColor = addColor
     }
     return (
-        <button className={"submit"} id={id} onClick={onClick}>
+        <button className={"submit " + className} id={id} onClick={onClick}>
             <span className="test">
                 {children}
             </span>
@@ -54,7 +54,7 @@ export default function Button({id, children, onClick, addColor}){
                     position: absolute;
                     width: 0;
                     height: calc(100% - 2px);
-                    top: -2px;
+                    top: -1px;
                     left: -1px;
                     background:#E18100;
                     display:block;
@@ -81,17 +81,17 @@ export default function Button({id, children, onClick, addColor}){
                     transition: .2s ease-out;
                     color: #333;
                 }
-                #submit-button {
+                .submit-button {
                     width:50%;
                     font-size: 2rem;
                 }
-                #submit-button .przeslona {
+                .submit-button .przeslona {
                     transition: .3s ease-in;                   
                 }
-                #submit-button:hover .przeslona {
+                .submit-button:hover .przeslona {
                     transition: .3s ease-out;                   
                 }
-                #submit-button .main-text {
+                .submit-button .main-text {
                     margin-left:50%;
                     transform: translateX(-50%);
                 }

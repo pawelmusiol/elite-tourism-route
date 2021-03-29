@@ -27,6 +27,8 @@ export default function Index() {
   const [finalResult, setFinalResult] = useState()
   const [Reset, setReset] = useState(false)
   const [LoginVisibility, setLoginVisibility] = useState("none");
+  const [Filter, setFilter] = useState("none")
+
   const RoutesDom = CreateRoutesDom(NumberOfRoutes, Systems, setSystems, Reset)
 
   const resetValues = () => {
@@ -36,6 +38,13 @@ export default function Index() {
     setFinalResult(undefined)
     setReset(!Reset)
   }
+
+  useEffect(() => {
+    if (LoginVisibility === "none") {
+      setFilter("none")
+    }
+    else setFilter("blur(3px)")
+  }, [LoginVisibility])
 
   useEffect(() => {
     if (NumberOfRoutes > 1 && window.innerWidth > 1000) {
@@ -50,23 +59,25 @@ export default function Index() {
   useReduxData(getBeacons, "api/beacons")
   return (
     <div id="main">
-      <TopBar reset={resetValues} setVisibility={setLoginVisibility} />
-      <div id="sytems">
-        <RouteCollection key={0} id={0} AllSystems={Systems} setSystemsToRoute={setSystems} first reset={Reset} >System Startowy</RouteCollection>
-        <AddRoutePanel Routes={NumberOfRoutes} setRoutes={setNumberOfRoutes} />
-        <div id="routes">
-          {RoutesDom}
-        </div>
-          <SubmitPanel onClick={() => axios.post("api/calculate",{systems: Systems}).then((res) => {
-          handleError(res)
-          setFinalResult(res.data.result)
+        <TopBar setVisibility={setLoginVisibility} />
+        <div id="content">
+        <div id="sytems">
+          <RouteCollection key={0} id={0} AllSystems={Systems} setSystemsToRoute={setSystems} first reset={Reset} >System Startowy</RouteCollection>
+          <AddRoutePanel Routes={NumberOfRoutes} setRoutes={setNumberOfRoutes} reset={resetValues} />
+          <div id="routes">
+            {RoutesDom}
+          </div>
+          <SubmitPanel onClick={() => axios.post("api/calculate", { systems: Systems }).then((res) => {
+            handleError(res)
+            setFinalResult(res.data.result)
           })} />
-      </div>
-      {typeof finalResult !== "undefined" &&
-        <Result data={finalResult} id="Result" />
-      }
-      <div>
-        <AddBeacon />
+        </div>
+        {typeof finalResult !== "undefined" &&
+          <Result data={finalResult} id="Result" />
+        }
+        <div>
+          <AddBeacon />
+        </div>
       </div>
       <Login Visibility={LoginVisibility} setVisibility={setLoginVisibility} />
 
@@ -76,9 +87,14 @@ export default function Index() {
           padding:1%;
           width:100%;
         }
+
+        #content{
+          filter:${Filter};
+        }
+
         #main{
           gap: 5%;
-          margin-top: calc(30px + 3rem); 
+          padding-top: calc(30px + 3rem); 
           display:flex;
           width: 100%;
           flex-direction:column;

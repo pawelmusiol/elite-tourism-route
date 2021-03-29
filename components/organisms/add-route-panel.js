@@ -1,10 +1,10 @@
 import {AddRoute} from "../molecules"
 
-export default function addRoutePanel({Routes, setRoutes}){    
+export default function addRoutePanel({Routes, reset, setRoutes}){    
     return (
         <div id="routes-count">
             <p>{Routes} {RoutesText(Routes)}</p>
-            <AddRoute Route={Routes} setRoute={setRoutes} />
+            <AddRoute Route={Routes} reset={reset} setRoute={setRoutes} />
             <style jsx>{`
                 #routes-count {
                     display: inline-flex;
