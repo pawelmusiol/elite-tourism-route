@@ -1,17 +1,28 @@
 import { LoginInput as Input, Button } from "../atoms"
 import { useState } from "react"
+import {useRouter } from "next/router"
 import axios from "axios"
+import { useCookies } from "react-cookie"
+import { useDispatch } from "react-redux"
+import { getUser } from "../../redux/actions/user"
 
 export default function LoginPanel({ setVisibility }) {
 	const [Login, setLogin] = useState("");
 	const [Password, setPassword] = useState("")
+	const router = useRouter()
+	const [cookies, setCookie, removeCookie] = useCookies()
+	const dispatch = useDispatch()
 
 	const LogUser = () => {
 		alert(Login + " " + Password)
 		axios.post("api/user/login", {login:Login, password:Password}).then(res => {
-			console.log(res)
+			let date = new Date()
+			date.setMinutes( date.getMinutes() + 1)
+			setCookie('token', res.data.token, {expires: date})
+			dispatch(getUser(res.data.user))
+			//router.push("user/" + res.data.result._id)
 		}).catch(err => {
-			console.log(err.response.status)
+			console.log(err)
 			if (err.response.status === 401) {
 				alert("Błędny login lub hasło")
 			}

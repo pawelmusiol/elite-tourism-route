@@ -1,5 +1,6 @@
 import { Menu } from "../molecules"
 import { Title, Button } from "../atoms"
+
 export default function TopBar({ reset, setVisibility }) {
     return (
         <div className="bar">

@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import jwt from "jsonwebtoken"
 import user from "../../../models/user"
 
 export default async (req, res) => {
@@ -15,7 +16,8 @@ export default async (req, res) => {
                     res.status(401).send({success:false})
                 }
                 else {
-                    res.status(200).send({success:true, result:result})
+                    let token = await signToken(result[0]._id, 1000 * 60)
+                    res.status(200).send({success:true, user:result[0], token: token })
                 }
             })
             break;
@@ -24,3 +26,8 @@ export default async (req, res) => {
             break;
     }
 }
+
+const signToken = async (id, time) => {
+    return jwt.sign({id:id.toString() },'dupa', {expiresIn: time})
+}
+
