@@ -23,7 +23,7 @@ export default async (req, res) => {
         case "POST":
             mongoose.connect(process.env.MONGODB_URI,connectionParams)
             .then(async ()=>{
-                system.create({name:req.body.systemName}).then(async (result) => {
+                system.create({name:req.body.systemName}).then(async () => {
                     let systems = await system.find({})
                     res.send(systems)
                 })

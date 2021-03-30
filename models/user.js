@@ -3,9 +3,10 @@ import mongoose from 'mongoose'
 const userSchema = new mongoose.Schema({
     login: String,
     password: String,
-	name: String,
-    registerDate:String,
-    lastActive: String
+    mail: String,
+    name: String,
+    registerDate:Date,
+    lastActive: Date
 })
 
-export default mongoose.models.User || mongoose.model('User', userSchema)
+export default mongoose.models.User ||  mongoose.model('User', userSchema)

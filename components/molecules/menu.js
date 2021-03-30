@@ -5,30 +5,11 @@ import { useRouter } from "next/router"
 import { useSelector } from "react-redux"
 import axios from "axios"
 
-const useGetUser = (cookies) => {
-    useEffect(() => {
-        let user = useSelector(state => state.user)
-        console.log(user._id)
-        if (cookies.token && !user._id) {
-            axios.post("api/user/get-user", {}, {
-                headers: { authorization: cookies.token }
-            }).then(res => {
-                console.log(res)
-            })
-        }
-        return "dupa"
-    }, [])
-}
-
 export default function Menu({ reset, setVisibility }) {
 
     const [cookies, setCookie, removeCookie] = useCookies()
-
+    let user = useSelector(state => state.user)
     let router = useRouter()
-
-    let user = useGetUser(cookies)
-
-    //console.log(user)
 
     return (
         <div className="menu">

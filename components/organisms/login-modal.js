@@ -4,7 +4,7 @@ import { Modal, LoginPanel as Login } from '../molecules'
 export default function LoginModal({Visibility,setVisibility}){
 	return (
 		<Modal Visibility={Visibility} setVisibility={setVisibility}>
-			<Login setVisibility={setVisibility}></Login>
+			<Login Visibility={Visibility} setVisibility={setVisibility}></Login>
 		</Modal>
 	)
 }
