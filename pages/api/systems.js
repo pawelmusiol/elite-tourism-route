@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 import system from "../../models/system"
 
-export default async (req, res) => {
+const systems = async (req, res) => {
 
     const connectionParams = {
 		useNewUrlParser: true,
@@ -36,3 +36,5 @@ export default async (req, res) => {
     }
     
 }
+
+export default systems

@@ -84,7 +84,7 @@ export default function RouteCollection({ setSystemsToRoute, reset, AllSystems, 
 				<h3>{children}</h3>
 				{SystemDom}
 				{!Systems.length 
-				&& <AddRouteRow start systems={Systems} setSystems={setSystems} addColor="#333" />}
+				&& <AddRouteRow start systems={Systems} setSystems={setSystems} addColor="#333" first/>}
 			</div>
 		)
 	}

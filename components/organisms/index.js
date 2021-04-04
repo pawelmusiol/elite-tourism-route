@@ -5,6 +5,7 @@ import AddBeacon from "./add-beacon"
 import SubmitPanel from "./submit-panel"
 import TopBar from "./top-bar"
 import Login from "./login-modal"
+import Section from "./section"
 
 export {
 	AddBeacon,
@@ -13,5 +14,6 @@ export {
 	AddRoutePanel,
 	SubmitPanel,
 	TopBar,
-	Login
+	Login,
+	Section
 }

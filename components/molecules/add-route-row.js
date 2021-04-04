@@ -66,7 +66,7 @@ const checkBeaconData = (beacons, systemInput, beaconInput) => {
 	})
 	return result
 }
-export default function AddRouteRow({ systems, setSystems, add, addColor }) {
+export default function AddRouteRow({ systems, setSystems, add, addColor, first }) {
 	const [SystemInputValue, setSystemInputValue] = useState("")
 	const [BeaconInputValue, setBeaconInputValue] = useState("")
 	const [storedSystems, storedBeacons] = useGetData()
@@ -115,7 +115,6 @@ export default function AddRouteRow({ systems, setSystems, add, addColor }) {
 					if (validateInput(BeaconInputValue)) {
 						let beaconExistInRedux = false
 						storedBeacons.some(beacon => {
-							console.log(beacon)
 							if (beacon.name === BeaconInputValue) {
 								beaconExistInRedux = true
 							}
@@ -130,8 +129,10 @@ export default function AddRouteRow({ systems, setSystems, add, addColor }) {
 							systemExistInRedux = true
 						}
 					})
-
-					if (systems.length) {
+					if(first){
+						data.after = [-2]
+					}
+					else if (systems.length) {
 						data.after = [systems[systems.length - 1].id]
 					}
 					else {

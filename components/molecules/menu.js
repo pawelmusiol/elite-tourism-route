@@ -1,15 +1,20 @@
 import { TopButton as Button } from "../atoms"
-import { useEffect } from "react"
-import { useCookies } from "react-cookie"
 import { useRouter } from "next/router"
 import { useSelector } from "react-redux"
-import axios from "axios"
 
-export default function Menu({ reset, setVisibility }) {
+export default function Menu({ setVisibility }) {
 
-    const [cookies, setCookie, removeCookie] = useCookies()
     let user = useSelector(state => state.user)
     let router = useRouter()
+    let link = ""
+
+    if (!router.pathname.includes("user")) {
+        link = "user/"
+    }
+    if (user._id) {
+        link += user._id
+    }
+
 
     return (
         <div className="menu">
@@ -25,12 +30,12 @@ export default function Menu({ reset, setVisibility }) {
                     Code
                 </a>
             </Button>
-            {!cookies.token ?
+            {!user._id ?
                 <Button onClick={() => setVisibility("block")}>
                     Zaloguj się
                 </Button>
                 :
-                <Button onClick={() => router.push("user/" + user._id)}>
+                <Button onClick={() => router.push(link)}>
                     Profil
                 </Button>
             }

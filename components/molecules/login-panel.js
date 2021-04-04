@@ -31,10 +31,12 @@ export default function LoginPanel({ Visibility, setVisibility }) {
 		else {
 			axios.post("api/user/login", { login: Login, password: Password }).then(res => {
 				let date = new Date()
-				date.setMinutes(date.getMinutes() + 1)
+				date.setMinutes(date.getMinutes() + 10)
 				setCookie('token', res.data.token, { expires: date })
-				dispatch(getUser(res.data.user))
-				//router.push("user/" + res.data.result._id)
+				let user = res.data.user
+				user.token = res.data.token
+				dispatch(getUser(user))
+				router.push("user/" + res.data.user._id)
 			}).catch(err => {
 				console.log(err)
 				if (err.response.status === 401) {

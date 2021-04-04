@@ -91,14 +91,6 @@ export default function Index() {
         #content{
           filter:${Filter};
         }
-
-        #main{
-          gap: 5%;
-          padding-top: calc(30px + 3rem); 
-          display:flex;
-          width: 100%;
-          flex-direction:column;
-        }
         #routes{
           display: grid;
           grid-template-columns: ${Layout};

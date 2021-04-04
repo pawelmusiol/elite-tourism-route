@@ -2,16 +2,9 @@ export default function Modal({ children, Visibility, setVisibility }) {
 
 	const CloseModal = (e) => {
 		let panel = document.getElementById("login-panel")
-		let posX = false
-		let posY = false
 		if (e.target.id === "login-modal") {
 			if (e.clientX < panel.offsetLeft || e.clientX > panel.offsetLeft + panel.offsetWidth) setVisibility("none")
 			if (e.clientY < panel.offsetTop || e.clientY > panel.offsetTop + panel.offsetHeight) setVisibility("none")
-		}
-		console.log(posX + " " + posY)
-
-		if (posX && posY) {
-			setVisibility("none")
 		}
 	}
 

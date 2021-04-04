@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 import beacon from "../../models/beacon"
 
-export default async (req, res) => {
+const beacons = async (req, res) => {
 
 	const connectionParams = {
 		useNewUrlParser: true,
@@ -28,3 +28,5 @@ export default async (req, res) => {
 	}
 
 }
+
+export default beacons

@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 //import User from "../../../models/User"
 
-export default async (req, res) => {
+const register = async (req, res) => {
     const connectionParams = {
         useNewUrlParser: true,
         useCreateIndex: true,
@@ -18,7 +18,7 @@ export default async (req, res) => {
                 if(mailCheck.length) res.status(409).send({success:false, error: "Email znajduje się w bazie danych"})
 
                 let loginCheck = await User.find({login: userData.login})
-                if(loginCheck.length) res.status(409).send({success:false, error: "Email znajduje się w bazie danych"})
+                if(loginCheck.length) res.status(409).send({success:false, error: "Login znajduje się w bazie danych"})
 
                 else{
                     let date = new Date()
@@ -38,3 +38,5 @@ export default async (req, res) => {
             break;
     }
 }
+
+export default register

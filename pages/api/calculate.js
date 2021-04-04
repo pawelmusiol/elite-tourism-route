@@ -89,7 +89,7 @@ const modifyAfter = (after1, after2) => {
   return result
 }
 
-//Checking  if this system is in Array with systems to delete
+//Checking if this system is in Array with systems to delete
 const CheckIfIsInArray = (array, index) => {
   for (let item of array) {
     if (item.id === index) {
@@ -101,7 +101,7 @@ const CheckIfIsInArray = (array, index) => {
 //One function to rule them all XD
 const getRoute = (systems) => {
   alert = ""
-  let SystemsData = SystemsDataToArray(systems)
+  let SystemsData = setFirstSystem(SystemsDataToArray(systems))
   let distances = getDistanceBetweenSystems(SystemsData)
   let combinations = getCombinations(SystemsData.length, SystemsData)
   let routes = getAllRoute(combinations, distances)
@@ -176,6 +176,7 @@ const getCombinations = (numberOfSystems, SystemsData) => {
   }
   let Conditions = setConditions(SystemsData)
   let Combinations = Heap(array.length, array)
+
   return CheckConditions(Conditions, Combinations)
 }
 
@@ -302,10 +303,48 @@ const getDistanceBetweenSystems = (systems) => {
   return results
 }
 
-export default async (req, res) => {
+const getFirstSystem = async (systems) => {
+  let first = {}
+  let idToDelete = null
+  for (let i = 0; i < systems.length; i++) {
+    const element = systems[i];
+    if (element.after === [-2]) {
+      first = element
+    }
+  }
+  systems.splice(idToDelete, 1)
+  return [systems, first]
+}
+
+const setFirstSystem = (systems) => {
+  let firstId = -1
+  for (let system of systems) {
+    if (system.after[0] === -2) {
+      firstId = system.id
+      break
+    }
+  }
+
+  for (let i = 0; i < systems.length; i++) {
+    if (systems[i].after.some(x => x === -1)) {
+      systems[i].after = [firstId]
+    }
+  }
+  return systems
+}
+
+const sortArrays = (systems) => {
+  return systems.sort((a, b) => {
+    return a.id - b.id
+  })
+}
+
+
+const calculate = async (req, res) => {
   switch (req.method) {
     case "POST":
-      let result = getRoute(req.body.systems)
+      let systems = sortArrays(req.body.systems)
+      let result = getRoute(systems)
       if (alert !== "") {
         res.status(200).send({ result: result, alert: alert })
       }
@@ -314,3 +353,5 @@ export default async (req, res) => {
       }
   }
 }
+
+export default calculate
