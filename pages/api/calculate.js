@@ -98,12 +98,22 @@ const CheckIfIsInArray = (array, index) => {
   }
 }
 
+//check if first system is same as last
+const checkforFirst = (systems) => {
+  if (systems[0].Systems[0].id === systems[systems.length-1].Systems[0].id) {
+    return true
+  }
+  else return false
+}
+
 //One function to rule them all XD
 const getRoute = (systems) => {
   alert = ""
-  let SystemsData = setFirstSystem(SystemsDataToArray(systems))
+  let same = checkforFirst(systems)
+  let SystemsData = SystemsDataToArray(systems)
   let distances = getDistanceBetweenSystems(SystemsData)
-  let combinations = getCombinations(SystemsData.length, SystemsData)
+  let combinations = getCombinations(SystemsData.length, SystemsData, same)
+  console.log(combinations)
   let routes = getAllRoute(combinations, distances)
   let bestRoute = getBestRoute(routes)
   let result
@@ -169,13 +179,18 @@ const getBestRoute = (routes) => {
 }
 
 //get all combination of possible routes
-const getCombinations = (numberOfSystems, SystemsData) => {
+const getCombinations = (numberOfSystems, SystemsData, same) => {
   let array = []
-  for (let i = 1; i < numberOfSystems; i++) {
+  let minusForSame = 1
+  if (same) {
+    minusForSame = 0
+  }
+  for (let i = 1; i < numberOfSystems- minusForSame; i++) {
     array.push(i)
   }
   let Conditions = setConditions(SystemsData)
-  let Combinations = Heap(array.length, array)
+  let Combinations = Heap(array.length, array, same, numberOfSystems-1)
+  console.log(Combinations)
 
   return CheckConditions(Conditions, Combinations)
 }
@@ -225,7 +240,8 @@ const setConditions = (SystemData) => {
 }
 
 //generate combinations of routes
-const Heap = (length, array, conditions) => {
+const Heap = (length, array, same, last) => {
+  console.log(last)
   let k = 0
   let tempArray = []
   let result = []
@@ -235,7 +251,10 @@ const Heap = (length, array, conditions) => {
   }
 
   for (let i = 0; i < array.length; i++) {
-    if (typeof result[k] !== "undefined" && (i === array.length - 1)) {
+    if (typeof result[k] !== "undefined" && (i === array.length - 1) && !same) {
+      result[k] = [...result[k], array[i], last]
+    }
+    else if (typeof result[k] !== "undefined" && (i === array.length - 1) && same) {
       result[k] = [...result[k], array[i], 0]
     }
     else if (typeof result[k] !== "undefined") {
@@ -260,7 +279,10 @@ const Heap = (length, array, conditions) => {
       }
       //zapis do tej j*banej tablicy
       for (let i = 0; i < array.length; i++) {
-        if (typeof result[k] !== "undefined" && (i === array.length - 1)) {
+        if (typeof result[k] !== "undefined" && (i === array.length - 1) && !same) {
+          result[k] = [...result[k], array[i], last]
+        }
+        else if (typeof result[k] !== "undefined" && (i === array.length - 1) && same) {
           result[k] = [...result[k], array[i], 0]
         }
         else if (typeof result[k] !== "undefined") {
@@ -303,35 +325,6 @@ const getDistanceBetweenSystems = (systems) => {
   return results
 }
 
-const getFirstSystem = async (systems) => {
-  let first = {}
-  let idToDelete = null
-  for (let i = 0; i < systems.length; i++) {
-    const element = systems[i];
-    if (element.after === [-2]) {
-      first = element
-    }
-  }
-  systems.splice(idToDelete, 1)
-  return [systems, first]
-}
-
-const setFirstSystem = (systems) => {
-  let firstId = -1
-  for (let system of systems) {
-    if (system.after[0] === -2) {
-      firstId = system.id
-      break
-    }
-  }
-
-  for (let i = 0; i < systems.length; i++) {
-    if (systems[i].after.some(x => x === -1)) {
-      systems[i].after = [firstId]
-    }
-  }
-  return systems
-}
 
 const sortArrays = (systems) => {
   return systems.sort((a, b) => {
@@ -343,6 +336,7 @@ const sortArrays = (systems) => {
 const calculate = async (req, res) => {
   switch (req.method) {
     case "POST":
+      console.log(req.body.systems)
       let systems = sortArrays(req.body.systems)
       let result = getRoute(systems)
       if (alert !== "") {

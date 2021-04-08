@@ -3,7 +3,7 @@ import { DataRow, AddRouteRow } from "../molecules"
 
 
 
-export default function RouteCollection({ setSystemsToRoute, reset, AllSystems, id, first, children }) {
+export default function RouteCollection({ setSystemsToRoute, reset, AllSystems, id, first, last, children }) {
 	const [NumberOfRows, setNumberOfRows] = useState(1)
 	const [Systems, setSystems] = useState([])
 
@@ -59,8 +59,29 @@ export default function RouteCollection({ setSystemsToRoute, reset, AllSystems, 
 	const SystemDom = Systems.map((system, index) => <DataRow id={index} key={index} changePosition={swapPosition} deleteItem={deleteItem}>{system.name}</DataRow>)
 
 
-	if (!first) {
+	if (first) {
+		return (
+			<div id="first">
+				<h3>{children}</h3>
+				{SystemDom}
+				{!Systems.length 
+				&& <AddRouteRow start systems={Systems} setSystems={setSystems} addColor="#333"/>}
+			</div>
+		)
 
+		
+	}
+	if(last) {
+		return (
+			<div id="last">
+				<h3>{children}</h3>
+				{SystemDom}
+				{!Systems.length 
+				&& <AddRouteRow start systems={Systems} setSystems={setSystems} addColor="#333"/>}
+			</div>
+		)
+	}
+	else {
 		return (
 			<div className="route">
 				<h3>{children}</h3>
@@ -75,16 +96,6 @@ export default function RouteCollection({ setSystemsToRoute, reset, AllSystems, 
 						margin-top:0;
 					}
 					`}</style>
-			</div>
-		)
-	}
-	else {
-		return (
-			<div id="first">
-				<h3>{children}</h3>
-				{SystemDom}
-				{!Systems.length 
-				&& <AddRouteRow start systems={Systems} setSystems={setSystems} addColor="#333" first/>}
 			</div>
 		)
 	}

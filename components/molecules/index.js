@@ -9,6 +9,8 @@ import LoginPanel from "./login-panel"
 import User from "./user"
 import Systems from "./systems"
 import Beacons from "./beacons"
+import BottomMenu from "./bottom-menu"
+import ErrorPanel from "./error-panel"
 
 export {
 	AddRouteRow,
@@ -21,5 +23,7 @@ export {
 	LoginPanel,
 	User,
 	Beacons,
-	Systems
+	Systems,
+	BottomMenu,
+	ErrorPanel
 }

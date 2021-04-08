@@ -73,3 +73,9 @@ button {
 .system-list-item{
     background: #222;
 }
+
+.input-error{
+    resize:none;
+    height: 5rem;
+    word-break: break-word;
+}

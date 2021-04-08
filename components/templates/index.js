@@ -1,4 +1,4 @@
-import { RouteCollection, Result, AddRoutePanel, AddBeacon, SubmitPanel, TopBar, Login } from "../organisms"
+import { RouteCollection, Result, AddRoutePanel, AddBeacon, SubmitPanel, TopBar, Login, Footer, Error } from "../organisms"
 import { useState, useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { getSystems } from "../../redux/actions/systems"
@@ -27,6 +27,7 @@ export default function Index() {
   const [finalResult, setFinalResult] = useState()
   const [Reset, setReset] = useState(false)
   const [LoginVisibility, setLoginVisibility] = useState("none");
+  const [ErrorVisibility, setErrorVisibility] = useState("none")
   const [Filter, setFilter] = useState("none")
 
   const RoutesDom = CreateRoutesDom(NumberOfRoutes, Systems, setSystems, Reset)
@@ -63,6 +64,7 @@ export default function Index() {
         <div id="content">
         <div id="sytems">
           <RouteCollection key={0} id={0} AllSystems={Systems} setSystemsToRoute={setSystems} first reset={Reset} >System Startowy</RouteCollection>
+          <RouteCollection key={999} id={999} AllSystems={Systems} setSystemsToRoute={setSystems} last reset={Reset}>System Końcowy</RouteCollection>
           <AddRoutePanel Routes={NumberOfRoutes} setRoutes={setNumberOfRoutes} reset={resetValues} />
           <div id="routes">
             {RoutesDom}
@@ -79,6 +81,9 @@ export default function Index() {
           <AddBeacon />
         </div>
       </div>
+      <Footer setVisibility={setErrorVisibility} />
+
+      <Error Visibility={ErrorVisibility} setVisibility={setErrorVisibility} />
       <Login Visibility={LoginVisibility} setVisibility={setLoginVisibility} />
 
       <style jsx>{`

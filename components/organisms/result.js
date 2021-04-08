@@ -43,7 +43,7 @@ const formatData = (data, setSystemsDom, setJumpsDom) => {
 }
 
 const setSystems = (Systems) => {
-	return Systems.map((system, index) => <p><a key={index} target="_blank" href={"https://www.edsm.net/en/system/id/" + system.id + "/name/" + system.name}>{system.name}
+	return Systems.map((system, index) => <p key={index}><a target="_blank" href={"https://www.edsm.net/en/system/id/" + system.id + "/name/" + system.name}>{system.name}
 		<sup><i className="fas fa-external-link-alt"></i></sup>
 	</a>
 		<style jsx>{`

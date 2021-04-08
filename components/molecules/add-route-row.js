@@ -66,7 +66,7 @@ const checkBeaconData = (beacons, systemInput, beaconInput) => {
 	})
 	return result
 }
-export default function AddRouteRow({ systems, setSystems, add, addColor, first }) {
+export default function AddRouteRow({ systems, setSystems, add, addColor}) {
 	const [SystemInputValue, setSystemInputValue] = useState("")
 	const [BeaconInputValue, setBeaconInputValue] = useState("")
 	const [storedSystems, storedBeacons] = useGetData()
@@ -104,6 +104,19 @@ export default function AddRouteRow({ systems, setSystems, add, addColor, first 
 			})
 		}
 	}
+
+	const transformData = (system) =>{
+		let returnValue = ""
+		for (let i = 0; i < system.length; i++) {
+			if (system[i] === "+") {
+				console.log(system[i])
+				returnValue += "%2B"
+			}
+			else returnValue += system[i]
+		}
+		return returnValue
+	}
+
 	let onEnter
 	if (systems) {
 		onEnter = () => {
@@ -111,7 +124,8 @@ export default function AddRouteRow({ systems, setSystems, add, addColor, first 
 				alert("Sprawdz poprawność danych")
 			}
 			else {
-				getSystem(SystemInputValue).then((data) => {
+				let systemUrl = transformData(SystemInputValue)
+				getSystem(systemUrl).then((data) => {
 					if (validateInput(BeaconInputValue)) {
 						let beaconExistInRedux = false
 						storedBeacons.some(beacon => {
@@ -129,10 +143,7 @@ export default function AddRouteRow({ systems, setSystems, add, addColor, first 
 							systemExistInRedux = true
 						}
 					})
-					if(first){
-						data.after = [-2]
-					}
-					else if (systems.length) {
+					if (systems.length) {
 						data.after = [systems[systems.length - 1].id]
 					}
 					else {
